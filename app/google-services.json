@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1044965839693",
+    "firebase_url": "https://financialportfoliomanage-80efb.firebaseio.com",
+    "project_id": "financialportfoliomanage-80efb",
+    "storage_bucket": "financialportfoliomanage-80efb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1044965839693:android:40a68c408b4e66d23a5d04",
+        "android_client_info": {
+          "package_name": "com.example.financialportfoliomanagement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1044965839693-ggc2tqdhn1i62l3hp8mjtpv02boamhek.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.financialportfoliomanagement",
+            "certificate_hash": "a9038e500bf47f84e9d7655c7b65f5c30d1ace38"
+          }
+        },
+        {
+          "client_id": "1044965839693-ec7k7hlucdlpk75mb9sh1ptv0ohvcptn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNNbFCpS-osWfugBCLMYT8tiwB1PZs6I0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1044965839693-ec7k7hlucdlpk75mb9sh1ptv0ohvcptn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
