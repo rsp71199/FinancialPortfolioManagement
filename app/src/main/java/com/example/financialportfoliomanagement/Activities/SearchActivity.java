@@ -1,5 +1,6 @@
 package com.example.financialportfoliomanagement.Activities;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -35,10 +36,11 @@ public class SearchActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<com.example.fpma.Models.SearchResult> searchResults = new ArrayList<>();
-
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        progressDialog = new ProgressDialog(this);
         setContentView(R.layout.activity_main);
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -81,13 +83,16 @@ public class SearchActivity extends AppCompatActivity {
                                     } catch (Exception e) {
 
                                     }
-                                    mAdapter = new SearchAdapter(searchResults);
+                                    mAdapter = new SearchAdapter(searchResults, getApplicationContext());
                                     recyclerView.setAdapter(mAdapter);
                                 }
                             };
                             r.run();
                         } catch (JSONException e) {
+
                             e.printStackTrace();
+                        } finally {
+                            progressDialog.cancel();
                         }
 
 
@@ -96,6 +101,7 @@ public class SearchActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.cancel();
                 Log.i("TAG", error.toString());
             }
         });
@@ -109,6 +115,8 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //Do some magic
+                progressDialog.setTitle("Loading search results...");
+                progressDialog.show();
                 networkCall(query);
                 return false;
             }
