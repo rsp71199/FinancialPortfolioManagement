@@ -6,8 +6,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.SeekBar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.financialportfoliomanagement.R;
+import com.example.financialportfoliomanagement.Utilities.ApiEndPoints;
 import com.github.mikephil.charting.charts.CandleStickChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -41,12 +42,15 @@ public class ChartsActivity extends AppCompatActivity {
     private StringRequest stringRequest;
     private ArrayList<CandleEntry> values = new ArrayList<>();
     private String TAG = "chartsActivity";
-    private Button refresh;
+
+    private String FUNCTION = ApiEndPoints.TIME_SERIES_INTRADAY;
     private String response;
     private String SYMBOL;
+    private String INTERVAL = "5min";
     private ProgressDialog progressDialog;
 
     private boolean threadInRun = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +60,14 @@ public class ChartsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_charts);
         Intent intent = getIntent();
         SYMBOL = intent.getStringExtra("SYMBOL");
-        setTitle("CandleStickChartActivity");
+        setTitle("Charts");
         chart = findViewById(R.id.chart1);
-        refresh = findViewById(R.id.refresh);
+
         seekBar = findViewById(R.id.seekbar);
+
+
+        //placing toolbar in place of actionbar
+//        setSupportActionBar(toolbar);
         progressDialog = new ProgressDialog(this);
         chart.setBackgroundColor(Color.WHITE);
         chart.getDescription().setEnabled(false);
@@ -78,14 +86,6 @@ public class ChartsActivity extends AppCompatActivity {
         chart.getLegend().setEnabled(false);
         queue = Volley.newRequestQueue(this);
         progressDialog.setTitle("Loading charts...");
-
-
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CallVolley("IBM", "TIME_SERIES_INTRADAY", "5min", "B02L3PBPXDL1PUY4");
-            }
-        });
         seekBar.setProgress(20);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -116,16 +116,39 @@ public class ChartsActivity extends AppCompatActivity {
         }
     }
 
-    private void CallVolley(String symbol, String function, String interval, String apiKey) {
+    private void CallVolley(String symbol, String function, final String interval, String apiKey) {
 
+        String arraySearchKey = "";
         progressDialog.show();
-        String url = "https://www.alphavantage.co/query?function="
-                + function + "&symbol="
-                + symbol + "&interval="
-                + interval + "&outputsize=full&apikey="
-                + apiKey;
+        String url = "";
+        if (function == ApiEndPoints.TIME_SERIES_INTRADAY) {
+            arraySearchKey = "Time Series (" + interval + ")";
+            url = "https://www.alphavantage.co/query?function="
+                    + function + "&symbol="
+                    + symbol + "&interval="
+                    + interval + "&outputsize=full&apikey="
+                    + apiKey;
+        } else if (function == ApiEndPoints.TIME_SERIES_DAILY) {
+            arraySearchKey = "Time Series (Daily)";
+            url = "https://www.alphavantage.co/query?function="
+                    + function + "&symbol="
+                    + symbol + "&outputsize=full&apikey="
+                    + apiKey;
+        } else if (function == ApiEndPoints.TIME_SERIES_WEEKLY) {
+            arraySearchKey = "Weekly Time Series";
+            url = "https://www.alphavantage.co/query?function="
+                    + function + "&symbol="
+                    + symbol + "&outputsize=full&apikey="
+                    + apiKey;
+        } else if (function == ApiEndPoints.TIME_SERIES_MONTHLY) {
+            arraySearchKey = "Monthly Time Series";
+            url = "https://www.alphavantage.co/query?function="
+                    + function + "&symbol="
+                    + symbol + "&outputsize=full&apikey="
+                    + apiKey;
+        }
 
-
+        final String finalArraySearchKey = arraySearchKey;
         stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -133,7 +156,7 @@ public class ChartsActivity extends AppCompatActivity {
                         response = res;
                         if (!threadInRun) {
                             threadInRun = true;
-                            updateValue(response, 20);
+                            updateValue(response, 20, interval, finalArraySearchKey);
                         }
 
                     }
@@ -148,9 +171,9 @@ public class ChartsActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    private void updateValue(String response, final int size) {
+    private void updateValue(String response, final int size, String interval, String arrayKey) {
         try {
-            final JSONObject json = new JSONObject(response).getJSONObject("Time Series (5min)");
+            final JSONObject json = new JSONObject(response).getJSONObject(arrayKey);
             final Iterator<String> x = json.keys();
 
             values.clear();
@@ -173,9 +196,9 @@ public class ChartsActivity extends AppCompatActivity {
                             float close = Float.valueOf(jsonElement.get("4. close").toString()).floatValue();
 
 
-                            String[] labelA = key.split(" ")[1].split(":");
-                            String label = labelA[0] + "." + labelA[1];
-                            Log.i("TAG", low + " " + high + " " + Float.parseFloat(label));
+//                            String[] labelA = key.split(" ")[1].split(":");
+//                            String label = labelA[0] + "." + labelA[1];
+//                            Log.i("TAG", low + " " + high + " " + Float.parseFloat(label));
                             values.add(new CandleEntry(
                                     i,
                                     high,
@@ -225,6 +248,111 @@ public class ChartsActivity extends AppCompatActivity {
         progressDialog.cancel();
         threadInRun = false;
         chart.invalidate();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.charts_bottom_appbar, menu);
+//        MenuItem item = menu.findItem(R.id.action_search);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.search: {
+                Intent i = new Intent(this, SearchActivity.class);
+                startActivity(i);
+                break;
+            }
+            case R.id.refresh: {
+                if (!threadInRun) {
+                    if (INTERVAL == "5min" || INTERVAL == "30min" || INTERVAL == "60min") {
+                        CallVolley(SYMBOL, FUNCTION, INTERVAL, "B02L3PBPXDL1PUY4");
+                    }
+
+                }
+                break;
+            }
+            case R.id.interval1: {
+                if (!threadInRun) {
+
+                    INTERVAL = "5min";
+                    FUNCTION = ApiEndPoints.TIME_SERIES_INTRADAY;
+                    CallVolley(SYMBOL, FUNCTION, INTERVAL, "B02L3PBPXDL1PUY4");
+                }
+
+
+                break;
+            }
+            case R.id.interval2: {
+                if (!threadInRun) {
+
+                    INTERVAL = "30min";
+                    FUNCTION = ApiEndPoints.TIME_SERIES_INTRADAY;
+                    CallVolley(SYMBOL, FUNCTION, INTERVAL, "B02L3PBPXDL1PUY4");
+
+
+                }
+                break;
+            }
+            case R.id.interval3: {
+                if (!threadInRun) {
+
+                    INTERVAL = "60min";
+                    FUNCTION = ApiEndPoints.TIME_SERIES_INTRADAY;
+                    CallVolley(SYMBOL, FUNCTION, INTERVAL, "B02L3PBPXDL1PUY4");
+
+
+                }
+                break;
+            }
+            case R.id.interval4: {
+                if (!threadInRun) {
+                    FUNCTION = ApiEndPoints.TIME_SERIES_DAILY;
+                    CallVolley(SYMBOL, FUNCTION, INTERVAL, "B02L3PBPXDL1PUY4");
+                }
+                break;
+            }
+            case R.id.interval5: {
+                if (!threadInRun) {
+                    FUNCTION = ApiEndPoints.TIME_SERIES_WEEKLY;
+                    CallVolley(SYMBOL, FUNCTION, INTERVAL, "B02L3PBPXDL1PUY4");
+                }
+                break;
+            }
+            case R.id.interval6: {
+                if (!threadInRun) {
+                    FUNCTION = ApiEndPoints.TIME_SERIES_MONTHLY;
+                    CallVolley(SYMBOL, FUNCTION, INTERVAL, "B02L3PBPXDL1PUY4");
+                }
+                break;
+            }
+            case R.id.interval7: {
+                break;
+            }
+            case R.id.candleChart: {
+                break;
+            }
+            case R.id.lineChart: {
+                break;
+            }
+            case R.id.barChart: {
+                break;
+            }
+
+
+        }
+        //noinspection SimplifiableIfStatement
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
