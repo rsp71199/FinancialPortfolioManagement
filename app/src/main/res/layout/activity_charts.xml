@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activities.ChartsActivity">
+    android:orientation="vertical"
+    android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:text="Refresh"
+        android:id="@+id/refresh"
+        android:layout_height="50dp"></Button>
+
+    <com.github.mikephil.charting.charts.CandleStickChart
+        android:id="@+id/chart1"
+        android:layout_width="match_parent"
+        android:layout_height="302dp"
+        android:layout_above="@+id/seekbar"
+
+        android:layout_below="@+id/refresh"
+        android:layout_alignParentBottom="true" />
+
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"></SeekBar>
+</LinearLayout>
