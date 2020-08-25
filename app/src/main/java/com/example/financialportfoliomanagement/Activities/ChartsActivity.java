@@ -25,6 +25,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.CandleData;
 import com.github.mikephil.charting.data.CandleDataSet;
 import com.github.mikephil.charting.data.CandleEntry;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,6 +66,8 @@ public class ChartsActivity extends AppCompatActivity {
         chart.getDescription().setEnabled(false);
         chart.setMaxVisibleValueCount(60);
         chart.setPinchZoom(true);
+        chart.setScaleMinima(0f, 0f);
+        chart.fitScreen();
         chart.setDrawGridBackground(false);
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
