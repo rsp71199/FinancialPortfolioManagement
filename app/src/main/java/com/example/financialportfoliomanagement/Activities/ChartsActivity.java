@@ -66,6 +66,9 @@ public class ChartsActivity extends AppCompatActivity {
         chart.setMaxVisibleValueCount(60);
         chart.setPinchZoom(true);
         chart.setDrawGridBackground(false);
+        chart.setScaleEnabled(true);
+        chart.setScaleXEnabled(true);
+        chart.setScaleYEnabled(true);
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
@@ -76,6 +79,9 @@ public class ChartsActivity extends AppCompatActivity {
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setEnabled(false);
         chart.getLegend().setEnabled(false);
+        chart.getViewPortHandler().setMaximumScaleX(50f);
+        chart.getViewPortHandler().setMaximumScaleY(50f);
+        chart.setPinchZoom(true);
         queue = Volley.newRequestQueue(this);
         progressDialog.setTitle("Loading charts...");
 

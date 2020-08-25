@@ -77,7 +77,7 @@ public class SearchActivity extends AppCompatActivity {
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject jsonElement = jsonArray.getJSONObject(i);
                                             String sym = jsonElement.get("1. symbol").toString();
-                                            String equityName = jsonElement.get("2. name").toString();
+                                                String equityName = jsonElement.get("2. name").toString();
                                             searchResults.add(new com.example.fpma.Models.SearchResult(equityName, sym));
                                         }
                                     } catch (Exception e) {

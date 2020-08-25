@@ -10,13 +10,13 @@
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="Refresh"
+        android:layout_marginTop="16dp"
 
+        android:text="Refresh"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"></Button>
+        app:layout_constraintTop_toTopOf="parent"></Button>
 
     <com.github.mikephil.charting.charts.CandleStickChart
         android:id="@+id/chart1"
@@ -26,8 +26,11 @@
 
         android:layout_below="@+id/refresh"
         android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/refresh"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintVertical_bias="0.182" />
 
     <SeekBar
         android:id="@+id/seekbar"
