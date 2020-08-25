@@ -45,6 +45,7 @@ public class SearchActivity extends AppCompatActivity {
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         init();
+        networkCall("A");
     }
 
     @Override
@@ -56,6 +57,8 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void networkCall(String symbol) {
+        progressDialog.setTitle("Loading search results...");
+        progressDialog.show();
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + symbol + "&apikey=B02L3PBPXDL1PUY4";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -115,8 +118,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //Do some magic
-                progressDialog.setTitle("Loading search results...");
-                progressDialog.show();
+
                 networkCall(query);
                 return false;
             }
