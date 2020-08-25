@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+    android:layout_gravity="top"
+    android:gravity="top"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_margin="5dp"
+            android:layout_width="100dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image"
+                android:src="@drawable/common_google_signin_btn_icon_dark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </ImageView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="5dp"
+
+            android:orientation="vertical"
+            android:weightSum="2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:textSize="15dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:textColor="@color/Black"
+                android:text="New Age Beverages Corporation (NBEV) Q2 2020 Earnings Call Transcript"
+                android:layout_height="match_parent"></TextView>
+
+            <TextView
+                android:id="@+id/summary"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:textSize="10dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/Black"
+                android:text="On today's call, we have Brent Willis, chief executive officer; Julie Garlikov, chief marketing officer; Mark Wilson, the president of ARIIX and the new group president of the combined company; and Greg Gould, our chief financial officer.  Forward-looking statements, specifically those concerning future performance, are subject to certain risks and uncertainties."
+                android:layout_height="match_parent"></TextView>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
