@@ -8,7 +8,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.financialportfoliomanagement.NetworkCalls.DashBoardNetworkUtility;
 import com.example.financialportfoliomanagement.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -28,11 +32,55 @@ public class DashboardActivity extends AppCompatActivity {
     public TextView nifty_change;
     public TextView bse_market_price;
     public TextView bse_change;
-
+    private DrawerLayout dl;
+    private ActionBarDrawerToggle t;
+    private NavigationView nv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        dl = (DrawerLayout) findViewById(R.id.activity_dashboard);
+        t = new ActionBarDrawerToggle(this, dl, R.string.open, R.string.close);
+
+        dl.addDrawerListener(t);
+        t.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        nv = (NavigationView) findViewById(R.id.navbar);
+        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.login:
+                        Toast.makeText(DashboardActivity.this, "Login", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.settings:
+                        Toast.makeText(DashboardActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.notification:
+                        Toast.makeText(DashboardActivity.this, "Notifications", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.contact:
+                        Toast.makeText(DashboardActivity.this, "Contact Us", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.help:
+                        Toast.makeText(DashboardActivity.this, "Help", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        return true;
+                }
+
+
+                return true;
+
+            }
+        });
+
+
+
         dashBoardNetworkUtility = new DashBoardNetworkUtility(this);
         newsRecyclerView = findViewById(R.id.news);
         trendingTickerRecyclerView = findViewById(R.id.trending);
@@ -116,6 +164,10 @@ public class DashboardActivity extends AppCompatActivity {
 
 
         }
+        if(t.onOptionsItemSelected(item))
+            return true;
+
+
         //noinspection SimplifiableIfStatement
 
 
