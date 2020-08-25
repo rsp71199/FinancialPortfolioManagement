@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/search"
+        android:title="Search"
+        android:contentDescription="content_description_search"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/refresh"
+        android:title="Refresh"
+        android:icon="@drawable/refresh"
+        android:contentDescription="content_description_more"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/time"
+        android:title="Interval"
+        android:icon="@drawable/time"
+        android:contentDescription="content_description_more"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/interval1"
+                android:title="5min"></item>
+            <item
+                android:id="@+id/interval2"
+                android:title="30min"></item>
+            <item
+                android:id="@+id/interval3"
+                android:title="60min"></item>
+            <item
+                android:id="@+id/interval4"
+                android:title="1day"></item>
+            <item
+                android:id="@+id/interval5"
+                android:title="1week"></item>
+            <item
+                android:id="@+id/interval6"
+                android:title="1month"></item>
+            <item
+                android:id="@+id/interval7"
+                android:title="full"></item>
+
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/chart"
+        android:title="Charts"
+        android:icon="@drawable/chart"
+        android:contentDescription="content_description_more"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/candleChart"
+                android:title="Candle Stick Chart"></item>
+            <item
+                android:id="@+id/lineChart"
+                android:title="Line Chart"></item>
+            <item
+                android:id="@+id/barChart"
+                android:title="Bar Chart"></item>
+        </menu>
+
+    </item>
+
+</menu>
