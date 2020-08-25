@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">FPMA</string>
-
+    <string name="open">open</string>
+    <string name="close">close</string>
     <string name="viewGithub">View on GitHub</string>
     <string name="reportProblem">Problem Report</string>
     <string name="viewWebsite">Developer Website</string>
