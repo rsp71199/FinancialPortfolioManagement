@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.financialportfoliomanagement.NetworkCalls.DashBoardNetworkUtility;
 import com.example.financialportfoliomanagement.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -40,6 +43,24 @@ public class DashboardActivity extends AppCompatActivity {
         setNewsRecyclerView();
         setTrendingTickerRecyclerView();
         setViewsData();
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.home_tab:
+                        Toast.makeText(DashboardActivity.this, "Home", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.commentary:
+                        Toast.makeText(DashboardActivity.this, "Commentary", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.report:
+                        Toast.makeText(DashboardActivity.this, "Reports", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
 

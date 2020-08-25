@@ -51,5 +51,8 @@
     <string name="dash">-</string>
     <string name="scrollViewStart">START OF SCROLLVIEW</string>
     <string name="scrollViewEnd">END OF SCROLLVIEW</string>
+    <string name="home">home</string>
+    <string name="commentary">commentary</string>
+    <string name="report">report</string>
 
 </resources>
