@@ -67,7 +67,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context, ChartsActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("SYMBOL", mDataset.get(position).symbol);
                 context.startActivity(i);
             }
