@@ -1,6 +1,7 @@
 package com.example.financialportfoliomanagement.NetworkCalls;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -41,12 +42,13 @@ public class DashBoardNetworkUtility {
     private List<TrendingTicker> trendingTickersResults = new ArrayList<>();
     private RecyclerView.Adapter newsAdapter;
     private RecyclerView.Adapter trendingTickersAdapter;
+    private ProgressDialog progressDialog;
 
     Object object;
 
-    public DashBoardNetworkUtility(Context context) {
+    public DashBoardNetworkUtility(Context context, ProgressDialog progressDialog) {
         this.context = context;
-
+        this.progressDialog = progressDialog;
     }
 
     public void set_NSE_BSE(final TextView bse1, final TextView bse2, final TextView nse1, final TextView nse2) {
@@ -94,8 +96,8 @@ public class DashBoardNetworkUtility {
 
 
             //for bse
-            Log.i("TAG", bse.toString());
-            Log.i("TAG", nse.toString());
+//            Log.i("TAG", bse.toString());
+//            Log.i("TAG", nse.toString());
             JSONObject bse_regularMarketPrice_object = bse.getJSONObject("regularMarketPrice");
             String bse_regularMarketPrice_value = bse_regularMarketPrice_object.getString("fmt");
             JSONObject bse_regularMarketChangePercent_object = bse.getJSONObject("regularMarketChangePercent");
@@ -114,6 +116,10 @@ public class DashBoardNetworkUtility {
             String nse_regularMarketChange_value = nse_regularMarketChange_object.getString("fmt");
             nse1.setText(nse_regularMarketPrice_value);
             nse2.setText(nse_regularMarketChange_value + " (" + nse_regularMarketChangePercent_value + "%)");
+
+            if (progressDialog.isShowing()) {
+                progressDialog.cancel();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -193,7 +199,7 @@ public class DashBoardNetworkUtility {
                         for (int i = 0; i < high.length(); i++) {
                             float val = (float) high.getLong(i);
                             nse_high.add(new Entry(i * 0.001f, val));
-                            Log.i("TAG", high.get(i).toString());
+//                            Log.i("TAG", high.get(i).toString());
                         }
                         LineDataSet set1 = new LineDataSet(nse_high, "DataSet 1");
 
@@ -251,7 +257,7 @@ public class DashBoardNetworkUtility {
                         for (int i = 0; i < high_bse.length(); i++) {
                             float val = (float) high_bse.getLong(i);
                             bse_high.add(new Entry(i * 0.001f, val));
-                            Log.i("TAG", high_bse.get(i).toString());
+//                            Log.i("TAG", high_bse.get(i).toString());
                         }
                         LineDataSet set2 = new LineDataSet(bse_high, "DataSet 1");
 
@@ -343,7 +349,7 @@ public class DashBoardNetworkUtility {
                         trendingTickersResults.clear();
                         for (int i = 0; i < quote.length(); i++) {
                             JSONObject quoteElement = new JSONObject(quote.get(i).toString());
-                            Log.i("TAG", quoteElement.toString());
+//                            Log.i("TAG", quoteElement.toString());
                             trendingTickersResults.add(new TrendingTicker(quoteElement.getString("shortName")
                                     , quoteElement.getString("regularMarketPrice")
                                     , quoteElement.getString("regularMarketChange")
