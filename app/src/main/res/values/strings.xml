@@ -55,5 +55,7 @@
     <string name="home">home</string>
     <string name="commentary">commentary</string>
     <string name="report">report</string>
+    <string name="Register">Register</string>
+    <string name="Login">Login</string>
 
 </resources>

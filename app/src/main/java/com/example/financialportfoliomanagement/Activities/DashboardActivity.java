@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -35,6 +36,7 @@ public class DashboardActivity extends AppCompatActivity {
     private DrawerLayout dl;
     private ActionBarDrawerToggle t;
     private NavigationView nv;
+    private ActionBar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,8 +56,10 @@ public class DashboardActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 switch (id) {
-                    case R.id.login:
+                    case R.id.Login:
                         Toast.makeText(DashboardActivity.this, "Login", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(DashboardActivity.this, LoginActivity.class);
+                        startActivity(i);
                         break;
                     case R.id.settings:
                         Toast.makeText(DashboardActivity.this, "Settings", Toast.LENGTH_SHORT).show();
@@ -91,22 +95,30 @@ public class DashboardActivity extends AppCompatActivity {
         setNewsRecyclerView();
         setTrendingTickerRecyclerView();
         setViewsData();
+        toolbar = getSupportActionBar();
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        toolbar.setTitle("Home");
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home_tab:
                         Toast.makeText(DashboardActivity.this, "Home", Toast.LENGTH_SHORT).show();
-                        break;
+                        toolbar.setTitle("Home");
+                        return true;
+//                        break;
                     case R.id.commentary:
                         Toast.makeText(DashboardActivity.this, "Commentary", Toast.LENGTH_SHORT).show();
-                        break;
+                        toolbar.setTitle("Commentary");
+                        return true;
+//                        break;
                     case R.id.report:
                         Toast.makeText(DashboardActivity.this, "Reports", Toast.LENGTH_SHORT).show();
-                        break;
+                        toolbar.setTitle("Reports");
+                        return true;
+//                        break;
                 }
-                return true;
+                return false;
             }
         });
     }
