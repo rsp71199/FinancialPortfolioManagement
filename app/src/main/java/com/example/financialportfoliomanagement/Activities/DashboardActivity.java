@@ -1,6 +1,7 @@
 package com.example.financialportfoliomanagement.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.financialportfoliomanagement.NetworkCalls.DashBoardNetworkUtility;
 import com.example.financialportfoliomanagement.R;
+import com.github.mikephil.charting.charts.LineChart;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -25,6 +27,8 @@ public class DashboardActivity extends AppCompatActivity {
     public TextView nifty_change;
     public TextView bse_market_price;
     public TextView bse_change;
+    private LineChart bse_chart, nse_chart, chart;
+    private final int fillColor = Color.argb(150, 51, 181, 229);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,8 @@ public class DashboardActivity extends AppCompatActivity {
         setNewsRecyclerView();
         setTrendingTickerRecyclerView();
         setViewsData();
+        setChart();
+
     }
 
 
@@ -100,5 +106,46 @@ public class DashboardActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    private void setChart() {
+        nse_chart = findViewById(R.id.nse_chart);
+        nse_chart.setDrawGridBackground(false);
+        nse_chart.getDescription().setEnabled(false);
+        nse_chart.setTouchEnabled(true);
+        nse_chart.setDragEnabled(true);
+        nse_chart.setScaleEnabled(false);
+        nse_chart.setPinchZoom(false);
+        nse_chart.getAxisLeft().setDrawGridLines(false);
+        nse_chart.getAxisRight().setEnabled(false);
+        nse_chart.getAxisLeft().setDrawLabels(false);
+        nse_chart.getAxisRight().setDrawLabels(false);
+        nse_chart.getXAxis().setDrawLabels(false);
+        nse_chart.getXAxis().setDrawGridLines(false);
+        nse_chart.getXAxis().setDrawAxisLine(false);
+        dashBoardNetworkUtility.set_NSE_chart_data(nse_chart);
+        nse_chart.invalidate();
+
+
+        bse_chart = findViewById(R.id.bse_chart);
+        bse_chart.setDrawGridBackground(false);
+        bse_chart.getDescription().setEnabled(false);
+        bse_chart.setTouchEnabled(true);
+
+
+        bse_chart.setDragEnabled(true);
+        bse_chart.setScaleEnabled(false);
+        bse_chart.setPinchZoom(false);
+        bse_chart.getAxisLeft().setDrawGridLines(false);
+        bse_chart.getAxisLeft().setDrawLabels(false);
+        bse_chart.getAxisRight().setDrawLabels(false);
+        bse_chart.getXAxis().setDrawLabels(false);
+        bse_chart.getAxisRight().setEnabled(false);
+        bse_chart.getXAxis().setDrawGridLines(false);
+        bse_chart.getXAxis().setDrawAxisLine(false);
+        dashBoardNetworkUtility.set_BSE_chart_data(bse_chart);
+        bse_chart.invalidate();
+    }
+
 
 }

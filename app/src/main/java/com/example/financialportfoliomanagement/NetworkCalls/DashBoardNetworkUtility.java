@@ -2,6 +2,7 @@ package com.example.financialportfoliomanagement.NetworkCalls;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -19,6 +20,11 @@ import com.example.financialportfoliomanagement.Adapters.TrendingTickersAdapter;
 import com.example.financialportfoliomanagement.Models.News;
 import com.example.financialportfoliomanagement.Models.TrendingTicker;
 import com.example.financialportfoliomanagement.Utilities.JSONFetcher;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -114,6 +120,7 @@ public class DashBoardNetworkUtility {
     }
 
 
+
     public void set_NSE_BSE_chart(String interval, String symbol, String range) {
         String url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-charts" +
                 "?comparisons=%255EGDAXI%252C%255EFCHI&region=IN&lang=en&symbol="
@@ -157,7 +164,126 @@ public class DashBoardNetworkUtility {
         queue.add(request);
     }
 
-    public void set_NSE_BSE_chart_data() {
+    public void set_NSE_chart_data(final LineChart nse_chart) {
+        final ArrayList<Entry> nse_high = new ArrayList<>();
+
+        try {
+            JSONObject jsonObject_nse = new JSONObject(JSONFetcher.fetch(context, "dummy_nse_chart.json"));
+
+
+            //for nse
+
+            JSONObject chart = jsonObject_nse.getJSONObject("chart");
+            JSONArray result = chart.getJSONArray("result");
+            JSONObject resultElement = result.getJSONObject(0);
+            JSONObject indicators = resultElement.getJSONObject("indicators");
+            JSONArray quote = indicators.getJSONArray("quote");
+            JSONObject quoteElement = quote.getJSONObject(0);
+            JSONArray low = quoteElement.getJSONArray("low");
+            JSONArray volume = quoteElement.getJSONArray("volume");
+            final JSONArray high = quoteElement.getJSONArray("high");
+            JSONArray close = quoteElement.getJSONArray("close");
+            JSONArray open = quoteElement.getJSONArray("open");
+
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    nse_high.clear();
+                    try {
+                        for (int i = 0; i < high.length(); i++) {
+                            float val = (float) high.getLong(i);
+                            nse_high.add(new Entry(i * 0.001f, val));
+                            Log.i("TAG", high.get(i).toString());
+                        }
+                        LineDataSet set1 = new LineDataSet(nse_high, "DataSet 1");
+
+                        set1.setColor(Color.GREEN);
+                        set1.setLineWidth(0.8f);
+                        set1.setDrawValues(false);
+                        set1.setDrawCircles(false);
+                        set1.setMode(LineDataSet.Mode.LINEAR);
+                        set1.setDrawFilled(true);
+                        LineData data = new LineData(set1);
+                        nse_chart.setData(data);
+                        Legend l = nse_chart.getLegend();
+                        l.setEnabled(false);
+                    } catch (Exception e) {
+
+                    }
+
+
+                }
+
+            };
+            r.run();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void set_BSE_chart_data(final LineChart bse_chart) {
+        final ArrayList<Entry> bse_high = new ArrayList<>();
+
+        try {
+            JSONObject jsonObject_nse = new JSONObject(JSONFetcher.fetch(context, "dummy_bse_chart.json"));
+
+
+            //for nse
+
+            JSONObject chart = jsonObject_nse.getJSONObject("chart");
+            JSONArray result = chart.getJSONArray("result");
+            JSONObject resultElement = result.getJSONObject(0);
+            JSONObject indicators = resultElement.getJSONObject("indicators");
+            JSONArray quote = indicators.getJSONArray("quote");
+            JSONObject quoteElement = quote.getJSONObject(0);
+            JSONArray low = quoteElement.getJSONArray("low");
+            JSONArray volume = quoteElement.getJSONArray("volume");
+            final JSONArray high_bse = quoteElement.getJSONArray("high");
+            JSONArray close = quoteElement.getJSONArray("close");
+            JSONArray open = quoteElement.getJSONArray("open");
+
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    bse_high.clear();
+                    try {
+                        for (int i = 0; i < high_bse.length(); i++) {
+                            float val = (float) high_bse.getLong(i);
+                            bse_high.add(new Entry(i * 0.001f, val));
+                            Log.i("TAG", high_bse.get(i).toString());
+                        }
+                        LineDataSet set2 = new LineDataSet(bse_high, "DataSet 1");
+
+                        set2.setColor(Color.GREEN);
+                        set2.setLineWidth(0.8f);
+                        set2.setDrawValues(false);
+                        set2.setDrawCircles(false);
+                        set2.setMode(LineDataSet.Mode.LINEAR);
+                        set2.setDrawFilled(true);
+
+                        // create a data object with the data sets
+                        LineData data = new LineData(set2);
+
+                        // set data
+                        bse_chart.setData(data);
+
+                        // get the legend (only possible after setting data)
+                        Legend l = bse_chart.getLegend();
+                        l.setEnabled(false);
+                    } catch (Exception e) {
+
+                    }
+
+
+                }
+
+            };
+            r.run();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -234,7 +360,7 @@ public class DashBoardNetworkUtility {
             r.run();
 
 
-            Log.i("TAG", object.toString());
+//            Log.i("TAG", object.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
