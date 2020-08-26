@@ -18,13 +18,7 @@
 <!--    android:layout_gravity="top"-->
 
 <!--    tools:context=".Activities.DashboardActivity">-->
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:menu="@menu/navigation_menu"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header"
-        android:id="@+id/navbar"/>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -299,4 +293,11 @@
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 </LinearLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:menu="@menu/navigation_menu"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        android:id="@+id/navbar"/>
 </androidx.drawerlayout.widget.DrawerLayout>

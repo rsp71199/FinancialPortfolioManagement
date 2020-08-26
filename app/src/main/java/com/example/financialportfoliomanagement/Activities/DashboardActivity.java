@@ -48,33 +48,27 @@ public class DashboardActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         nv = (NavigationView) findViewById(R.id.navbar);
+
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                switch (id) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                switch(id)
+                {
                     case R.id.login:
-                        Toast.makeText(DashboardActivity.this, "Login", Toast.LENGTH_SHORT).show();
-                        break;
+                        Toast.makeText(DashboardActivity.this, "Login",Toast.LENGTH_SHORT).show();break;
                     case R.id.settings:
-                        Toast.makeText(DashboardActivity.this, "Settings", Toast.LENGTH_SHORT).show();
-                        break;
+                        Toast.makeText(DashboardActivity.this, "Settings",Toast.LENGTH_SHORT).show();break;
                     case R.id.notification:
-                        Toast.makeText(DashboardActivity.this, "Notifications", Toast.LENGTH_SHORT).show();
-                        break;
+                        Toast.makeText(DashboardActivity.this, "My Cart",Toast.LENGTH_SHORT).show();break;
                     case R.id.contact:
-                        Toast.makeText(DashboardActivity.this, "Contact Us", Toast.LENGTH_SHORT).show();
-                        break;
+                        Toast.makeText(DashboardActivity.this,"Contact Us",Toast.LENGTH_SHORT).show();break;
                     case R.id.help:
-                        Toast.makeText(DashboardActivity.this, "Help", Toast.LENGTH_SHORT).show();
-                        break;
+                        Toast.makeText(DashboardActivity.this,"Help",Toast.LENGTH_SHORT).show();break;
                     default:
                         return true;
                 }
-
-
                 return true;
-
             }
         });
 
@@ -141,7 +135,13 @@ public class DashboardActivity extends AppCompatActivity {
             case R.id.refresh: {
                 setViewsData();
                 break;
+
+
             }
+//            case R.id.login:{
+//                Toast.makeText(DashboardActivity.this,"Login",Toast.LENGTH_SHORT).show();
+//                break;
+//            }
 
 
         }
