@@ -1,5 +1,6 @@
 package com.example.financialportfoliomanagement.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -17,14 +18,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.financialportfoliomanagement.Adapters.WatchListAdapter;
 import com.example.financialportfoliomanagement.Auth.Auth;
 import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteRetreiveInterface;
+import com.example.financialportfoliomanagement.Listners.WatchListDataListner;
+import com.example.financialportfoliomanagement.Models.WatchListItem;
+import com.example.financialportfoliomanagement.NetworkCalls.WatchListAsyncTask;
 import com.example.financialportfoliomanagement.R;
+
+import java.util.List;
 
 public class WatchListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private WatchListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private Toolbar toolbar;
+    private ProgressDialog progressDialog;
+    private WatchListAsyncTask watchListAsyncTask;
     private com.google.android.material.floatingactionbutton.FloatingActionButton floatingActionButton;
     Auth auth;
 
@@ -36,10 +44,26 @@ public class WatchListActivity extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.floating_add_button);
         setSupportActionBar(toolbar);
         auth = new Auth();
+        progressDialog = new ProgressDialog(this);
+
         auth.getUser(new AuthOnCompleteRetreiveInterface() {
             @Override
             public void onFireBaseUserRetrieveSuccess() {
+
                 recyclerViewSetter();
+                watchListAsyncTask = new WatchListAsyncTask(getApplication(), auth.user.getWatch_list_symbols(), progressDialog);
+                watchListAsyncTask.setWatchListDataListner(new WatchListDataListner() {
+                    @Override
+                    public void onDataFetched(List<WatchListItem> listItems) {
+                        mAdapter = new WatchListAdapter(listItems, getApplication(), auth, progressDialog);
+                        recyclerView.setAdapter(mAdapter);
+                        progressDialog.cancel();
+                    }
+                });
+                watchListAsyncTask.execute(1);
+                progressDialog.setTitle("loading...");
+                progressDialog.show();
+
             }
 
             @Override
@@ -54,6 +78,7 @@ public class WatchListActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
     }
 
     private void recyclerViewSetter() {
@@ -66,8 +91,7 @@ public class WatchListActivity extends AppCompatActivity {
         Drawable verticalDivider = ContextCompat.getDrawable(this, R.drawable.shape);
         dividerItemDecoration.setDrawable(verticalDivider);
         recyclerView.addItemDecoration(dividerItemDecoration);
-        mAdapter = new WatchListAdapter(auth.user.getWatch_list_symbols(), getApplicationContext());
-        recyclerView.setAdapter(mAdapter);
+
     }
 
 
@@ -94,15 +118,20 @@ public class WatchListActivity extends AppCompatActivity {
                 break;
             }
             case R.id.refresh: {
-//                setViewsData();
+                mAdapter.refresh();
                 break;
             }
 
 
         }
-        //noinspection SimplifiableIfStatement
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (mAdapter != null) mAdapter.refresh();
     }
 }

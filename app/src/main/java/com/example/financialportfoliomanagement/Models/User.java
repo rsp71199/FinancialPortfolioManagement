@@ -50,6 +50,17 @@ public class User {
         return false;
     }
 
+    public boolean delete_watch_list_item(String symbol) {
+        if (this.watch_list_symbols != null) {
+            if (this.watch_list_symbols.contains(symbol)) {
+                this.watch_list_symbols.remove(watch_list_symbols.indexOf(symbol));
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
     public String getUser_id() {
         return user_id;
     }
@@ -57,6 +68,7 @@ public class User {
     public String getName() {
         return name;
     }
+
 
 
 }

@@ -45,12 +45,14 @@ public class SearchActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
     private Auth auth;
+    private String from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         progressDialog = new ProgressDialog(this);
         setContentView(R.layout.activity_main);
+        from = getIntent().getStringExtra("from");
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
@@ -93,7 +95,7 @@ public class SearchActivity extends AppCompatActivity {
                         try {
                             final JSONObject json = new JSONObject(response);
                             final JSONArray jsonArray = json.getJSONArray("bestMatches");
-                            Log.i("TAG", response);
+//                            Log.i("TAG", response);
                             final Handler handler = new Handler();
                             final List<String> user_watch_list = auth.user.getWatch_list_symbols();
                             final Runnable r = new Runnable() {
@@ -107,7 +109,7 @@ public class SearchActivity extends AppCompatActivity {
                                             boolean b = user_watch_list != null && user_watch_list.contains(sym);
 
                                             searchResults.add(new SearchResult(equityName, sym, b));
-                                            Log.i("TAG", equityName);
+//                                            Log.i("TAG", equityName);
                                         }
                                     } catch (Exception e) {
 

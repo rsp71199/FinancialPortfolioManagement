@@ -3,14 +3,14 @@ package com.example.financialportfoliomanagement.Models;
 public class StockItem {
     public String symbol;
     public String name;
-    public Float low, high, open, close;
+    public String low, high, open, close;
 
     public StockItem(String symbol, String name) {
         this.symbol = symbol;
         this.name = name;
     }
 
-    public StockItem(String symbol, String name, Float low, Float high, Float open, Float close) {
+    public StockItem(String symbol, String name, String low, String high, String open, String close) {
         this.symbol = symbol;
         this.name = name;
         this.low = low;
