@@ -18,10 +18,10 @@
         </activity>
         <activity
             android:name=".Activities.DashboardActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity android:name=".Activities.ChartsActivity"></activity>
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.ChartsActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Activities.SearchActivity"
             android:screenOrientation="portrait"></activity>
