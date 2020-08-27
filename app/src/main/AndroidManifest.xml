@@ -9,9 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".Activities.DashboardActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".Activities.DashBoardActivity2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,32 +17,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.ChartsActivity"
-            android:screenOrientation="landscape">
-
+            android:name=".Activities.DashboardActivity"
+            android:screenOrientation="portrait">
 
         </activity>
+        <activity android:name=".Activities.ChartsActivity"></activity>
         <activity
             android:name=".Activities.SearchActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Activities.SplashScreenActivity"
-            android:screenOrientation="portrait">
-
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Activities.LoginActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Activities.RegistrationActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

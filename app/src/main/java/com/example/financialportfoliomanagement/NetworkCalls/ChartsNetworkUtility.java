@@ -4,8 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.view.View;
+
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.financialportfoliomanagement.R;
 import com.example.financialportfoliomanagement.Utilities.ApiEndPoints;
 import com.github.mikephil.charting.charts.CandleStickChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -37,9 +40,10 @@ import java.util.List;
 public class ChartsNetworkUtility {
     public RequestQueue queue;
     private StringRequest stringRequest;
-
+    private Context context;
 
     public ChartsNetworkUtility(Context context) {
+        this.context = context;
         queue = Volley.newRequestQueue(context);
     }
 
@@ -87,12 +91,12 @@ public class ChartsNetworkUtility {
 
 //                        Log.i("TAG",res);
                         if (chart_id == 0) {
-                            candleStickChart.setVisibility(View.VISIBLE);
-                            lineChart.setVisibility(View.INVISIBLE);
+//                            candleStickChart.setVisibility(View.VISIBLE);
+//                            lineChart.setVisibility(View.INVISIBLE);
                             setCandleStickChartData(candleStickChart, res, finalArraySearchKey, progressDialog);
                         } else {
-                            candleStickChart.setVisibility(View.INVISIBLE);
-                            lineChart.setVisibility(View.VISIBLE);
+//                            candleStickChart.setVisibility(View.INVISIBLE);
+//                            lineChart.setVisibility(View.VISIBLE);
                             setLineChartData(lineChart, res, finalArraySearchKey, progressDialog);
                         }
 
@@ -246,13 +250,18 @@ public class ChartsNetworkUtility {
         set1.setDrawCircles(false);
         set1.setMode(LineDataSet.Mode.LINEAR);
         set1.setDrawFilled(true);
+        Drawable drawable1 = ContextCompat.getDrawable(context, R.drawable.fade_line_chart);
+        set1.setFillDrawable(drawable1);
+
 
         set2.setColor(Color.RED);
+        Drawable drawable2 = ContextCompat.getDrawable(context, R.drawable.fade_line_chart2);
+        set2.setFillDrawable(drawable2);
         set2.setLineWidth(1.0f);
         set2.setDrawValues(false);
         set2.setDrawCircles(false);
         set2.setMode(LineDataSet.Mode.LINEAR);
-        set2.setDrawFilled(false);
+        set2.setDrawFilled(true);
 
 
         // create a data object with the data sets

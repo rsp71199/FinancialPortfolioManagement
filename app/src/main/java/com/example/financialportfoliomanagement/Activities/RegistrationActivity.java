@@ -48,7 +48,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         password2 = findViewById(R.id.password_register2);
         mRegisterPresenter = new RegistrationPresenter(this);
         mPrgressDialog = new ProgressDialog(this);
-        mPrgressDialog.setMessage("Please wait, Adding profile to database.");
+        mPrgressDialog.setMessage("Please wait, Adding profile to database...");
 
 
         btnRegistration.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +106,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         mPrgressDialog.dismiss();
 //        btnRegistration.setText("Email verified ?");
         Toast.makeText(getApplicationContext(), "Successfully Registered", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(RegistrationActivity.this, DashboardActivity.class);
+        Intent intent = new Intent(RegistrationActivity.this, DashBoardActivity2.class);
         startActivity(intent);
         finish();
     }

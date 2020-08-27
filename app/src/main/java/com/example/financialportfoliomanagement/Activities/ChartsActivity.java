@@ -1,15 +1,17 @@
 package com.example.financialportfoliomanagement.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.example.financialportfoliomanagement.NetworkCalls.ChartsNetworkUtility;
 import com.example.financialportfoliomanagement.R;
@@ -19,21 +21,20 @@ import com.github.mikephil.charting.charts.CandleStickChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 public class ChartsActivity extends AppCompatActivity {
 
     private CandleStickChart candleStickChart;
     private LineChart lineChart;
+    private CardView candleCard, lineCard;
     private ChartsNetworkUtility chartsNetworkUtility;
     private String TAG = "chartsActivity";
     private String FUNCTION = ApiEndPoints.TIME_SERIES_INTRADAY;
     private String SYMBOL;
     private String INTERVAL = "5min";
     private ProgressDialog progressDialog;
-    int current_chart_id = 1;
+    int current_chart_id = 0;
+    private Toolbar toolbar;
 
 
     @Override
@@ -41,7 +42,8 @@ public class ChartsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charts);
         Intent intent = getIntent();
-
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         SYMBOL = intent.getStringExtra("SYMBOL");
         setTitle("Charts");
         SYMBOL = "IBM";
@@ -50,6 +52,8 @@ public class ChartsActivity extends AppCompatActivity {
         chartsNetworkUtility = new ChartsNetworkUtility(this);
         setCandleChart();
         setLineChart();
+        lineCard.setVisibility(View.INVISIBLE);
+        candleCard.setVisibility(View.VISIBLE);
         chartsNetworkUtility.setChart(lineChart, candleStickChart, SYMBOL
                 , FUNCTION, INTERVAL, ApiEndPoints.alphaApi, current_chart_id, progressDialog);
     }
@@ -57,61 +61,66 @@ public class ChartsActivity extends AppCompatActivity {
 
     private void setCandleChart() {
         ChartMarker chartMarker = new ChartMarker(this, R.layout.tool_tip);
+        candleCard = findViewById(R.id.candleChartCard);
         candleStickChart = findViewById(R.id.candleChart);
-        candleStickChart.setBackgroundColor(Color.WHITE);
+        candleStickChart.setBackgroundColor(Color.BLACK);
         candleStickChart.getDescription().setEnabled(false);
-        candleStickChart.setMaxVisibleValueCount(60);
+//        candleStickChart.setMaxVisibleValueCount(60);
         candleStickChart.setPinchZoom(true);
         candleStickChart.setBorderColor(Color.BLACK);
-        candleStickChart.setDrawGridBackground(true);
-        candleStickChart.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
+        candleStickChart.setDrawGridBackground(false);
+//        candleStickChart.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
         candleStickChart.setClickable(true);
         candleStickChart.setMarker(chartMarker);
         XAxis xAxis = candleStickChart.getXAxis();
+        xAxis.setDrawAxisLine(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(true);
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setLabelCount(4);
+        xAxis.setDrawGridLines(false);
         YAxis leftAxis = candleStickChart.getAxisLeft();
+        leftAxis.setDrawAxisLine(false);
         leftAxis.setLabelCount(7, false);
         leftAxis.setDrawGridLines(true);
-        leftAxis.setDrawAxisLine(true);
+        leftAxis.setGridColor(Color.LTGRAY);
+        leftAxis.setGridColor(R.color.White);
+        leftAxis.setGridLineWidth(0.5f);
+//        leftAxis.setDrawAxisLine(true);
+        leftAxis.setTextColor(Color.WHITE);
         YAxis rightAxis = candleStickChart.getAxisRight();
         rightAxis.setEnabled(false);
         candleStickChart.getLegend().setEnabled(false);
 
     }
 
+    @SuppressLint("ResourceAsColor")
     private void setLineChart() {
-
+        lineCard = findViewById(R.id.lineChartCard);
         ChartMarker chartMarker = new ChartMarker(this, R.layout.tool_tip);
         lineChart = findViewById(R.id.lineChart);
-        lineChart.setDrawGridBackground(true);
+        lineChart.setBackgroundColor(R.color.primaryExtraLight);
+        lineChart.setDrawGridBackground(false);
         lineChart.getDescription().setEnabled(true);
         lineChart.setMarker(chartMarker);
-
         lineChart.setBorderColor(Color.BLACK);
         lineChart.setTouchEnabled(true);
         lineChart.setDragEnabled(true);
         lineChart.setScaleEnabled(true);
         lineChart.setPinchZoom(true);
+        lineChart.getAxisLeft().setDrawAxisLine(false);
         lineChart.getAxisLeft().setDrawGridLines(true);
-        lineChart.getAxisRight().setEnabled(true);
+        lineChart.getAxisLeft().setGridLineWidth(0.5f);
+        lineChart.getAxisLeft().setGridColor(R.color.White);
+        lineChart.getAxisRight().setEnabled(false);
         lineChart.getAxisLeft().setDrawLabels(true);
-        lineChart.getAxisRight().setDrawLabels(true);
+        lineChart.getAxisLeft().setTextColor(Color.WHITE);
+        lineChart.getAxisRight().setDrawLabels(false);
         lineChart.getXAxis().setDrawLabels(true);
-        lineChart.getXAxis().setDrawGridLines(true);
-        lineChart.getXAxis().setDrawAxisLine(true);
-        lineChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                lineChart.highlightValue(h);
-                Log.i("TAG", "_____________________" + e.toString());
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
+        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        lineChart.getXAxis().setLabelCount(4, true);
+        lineChart.getXAxis().setDrawGridLines(false);
+        lineChart.getXAxis().setDrawAxisLine(false);
+        lineChart.getXAxis().setTextColor(Color.WHITE);
 
 
     }
@@ -125,18 +134,9 @@ public class ChartsActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.charts_bottom_appbar, menu);
-//        MenuItem item = menu.findItem(R.id.action_search);
-
         return true;
     }
 
@@ -204,12 +204,16 @@ public class ChartsActivity extends AppCompatActivity {
                 current_chart_id = 0;
                 chartsNetworkUtility.setChart(lineChart, candleStickChart, SYMBOL
                         , FUNCTION, INTERVAL, ApiEndPoints.alphaApi, current_chart_id, progressDialog);
+                lineCard.setVisibility(View.INVISIBLE);
+                candleCard.setVisibility(View.VISIBLE);
                 break;
             }
             case R.id.lineChart: {
                 current_chart_id = 1;
                 chartsNetworkUtility.setChart(lineChart, candleStickChart, SYMBOL
                         , FUNCTION, INTERVAL, ApiEndPoints.alphaApi, current_chart_id, progressDialog);
+                lineCard.setVisibility(View.VISIBLE);
+                candleCard.setVisibility(View.INVISIBLE);
             }
             case R.id.barChart: {
                 break;

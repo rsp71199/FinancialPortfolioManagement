@@ -308,6 +308,7 @@
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
+
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -317,4 +318,5 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
         android:id="@+id/navbar" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

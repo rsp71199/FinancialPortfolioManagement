@@ -1,53 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:backgroundTint="@color/DarkGray"
     android:orientation="vertical"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="400dp">
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/Black" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
-
-            android:layout_margin="10dp"
-            android:elevation="20dp"
-            app:cardCornerRadius="10dp"
+            android:backgroundTint="@color/Black"
+            android:background="@color/Black"
+            android:id="@+id/candleChartCard"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:elevation="10dp"
+            android:layout_height="400dp">
 
             <com.github.mikephil.charting.charts.CandleStickChart
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_margin="10dp"
                 android:id="@+id/candleChart"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="invisible"
-                android:layout_marginTop="40dp" />
+                android:layout_height="match_parent" />
         </androidx.cardview.widget.CardView>
+
 
         <androidx.cardview.widget.CardView
-
-            android:layout_margin="10dp"
-            android:elevation="20dp"
-            app:cardCornerRadius="10dp"
+            android:backgroundTint="@color/Black"
+            android:background="@color/Black"
+            android:id="@+id/lineChartCard"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:elevation="10dp"
+            android:layout_height="400dp">
 
             <com.github.mikephil.charting.charts.LineChart
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_margin="10dp"
                 android:id="@+id/lineChart"
-                android:visibility="invisible"
                 android:layout_height="match_parent"
-                android:layout_marginTop="40dp"
+
                 android:layout_width="match_parent" />
-
-
         </androidx.cardview.widget.CardView>
-
 
     </FrameLayout>
 

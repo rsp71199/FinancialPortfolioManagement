@@ -16,8 +16,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.financialportfoliomanagement.Adapters.IndexAdapter;
 import com.example.financialportfoliomanagement.Adapters.NewsAdapter;
 import com.example.financialportfoliomanagement.Adapters.TrendingTickersAdapter;
+import com.example.financialportfoliomanagement.Models.Index;
 import com.example.financialportfoliomanagement.Models.News;
 import com.example.financialportfoliomanagement.Models.TrendingTicker;
 import com.example.financialportfoliomanagement.Utilities.JSONFetcher;
@@ -448,5 +450,47 @@ public class DashBoardNetworkUtility {
         };
 
         r.run();
+    }
+
+    public void set_index_recycler_view_data(final RecyclerView indexRecyclerView, final Context context) {
+
+        final List<Index> indexList = new ArrayList<>();
+        try {
+            JSONObject res = new JSONObject(JSONFetcher.fetch(context, "dummy_summary.json"));
+            JSONObject marketSummaryResponse = res.getJSONObject("marketSummaryResponse");
+            final JSONArray result = marketSummaryResponse.getJSONArray("result");
+            new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        for (int i = 0; i < result.length(); i++) {
+                            JSONObject element = result.getJSONObject(i);
+                            String fullExchangeName = element.getString("fullExchangeName");
+                            String regularMarketChangePercent = element.getJSONObject("regularMarketChangePercent").getString("fmt");
+                            String regularMarketChangePercentRaw = element.getJSONObject("regularMarketChangePercent").getString("raw");
+                            String regularMarketPrice = element.getJSONObject("regularMarketPrice").getString("raw");
+                            String regularMarketChange = element.getJSONObject("regularMarketChange").getString("fmt");
+                            String regularMarketPreviousClose = element.getJSONObject("regularMarketPreviousClose").getString("raw");
+                            boolean b = false;
+                            float percent = Float.parseFloat(regularMarketChangePercentRaw);
+                            if (percent <= 0) b = true;
+                            indexList.add(new Index(fullExchangeName
+                                    , regularMarketPrice
+                                    , regularMarketChange + " (" + regularMarketChangePercent + ")"
+                                    , regularMarketPreviousClose, b));
+
+                            Log.i("TAG", fullExchangeName);
+                        }
+
+                        IndexAdapter indexAdapter = new IndexAdapter(indexList, context);
+                        indexRecyclerView.setAdapter(indexAdapter);
+                    } catch (Exception e) {
+
+                    }
+                }
+            }.run();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
