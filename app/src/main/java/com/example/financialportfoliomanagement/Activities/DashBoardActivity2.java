@@ -89,9 +89,12 @@ public class DashBoardActivity2 extends AppCompatActivity {
                     case R.id.settings:
                         Toast.makeText(DashBoardActivity2.this, "Settings", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.watchlist:
+                    case R.id.watchlist: {
                         Toast.makeText(DashBoardActivity2.this, "My Watch List", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(DashBoardActivity2.this, WatchListActivity.class));
                         break;
+                    }
+
                     case R.id.contact:
                         Toast.makeText(DashBoardActivity2.this, "Contact Us", Toast.LENGTH_SHORT).show();
                         break;

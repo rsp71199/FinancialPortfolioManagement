@@ -1,9 +1,13 @@
 package com.example.financialportfoliomanagement.Auth;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteRetreiveInterface;
+import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteUpdateInterface;
 import com.example.financialportfoliomanagement.Models.User;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -51,21 +55,36 @@ public class Auth {
         }
     }
 
-//    public void setUser(final AuthOnCompleteUpdateInterface authOnCompleteUpdateInterface, User new_user) {
-//        if (firebaseUser != null) {
-//            firebaseFirestore.collection("User").document(firebaseUser.getUid())
-//                    .update("current_time", new_user.getCurrent_time(),
-//                            "current_mall_id", new_user.getCurrent_mall_id(),
-//                            "current_plot_id", new_user.getCurrent_plot_id(),
-//                            "current_duration", new_user.getCurrent_duration(),
-//                            "has_taken", new_user.isHas_taken(),
-//                            "current_end_time", new_user.getCurrent_end_time(),
-//                            "transaction_history", new_user.getTransaction_history());
-//            authOnCompleteUpdateInterface.onFireBaseUserUpdateSuccess();
-//        } else {
-//            authOnCompleteUpdateInterface.onFireBaseUserUpdateFailure();
-//        }
-//    }
+    public void setUser(final AuthOnCompleteUpdateInterface authOnCompleteUpdateInterface, User new_user) {
+        if (firebaseUser != null) {
+            firebaseFirestore.collection("users").document(firebaseUser.getUid())
+                    .update("watch_list_symbols", new_user.getWatch_list_symbols()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Log.i("TAG", ">>>>>>>>>>>>>>>>>>>>>>>>>>>symbol added ");
+                        authOnCompleteUpdateInterface.onFireBaseUserUpdateSuccess();
+                    } else {
+                        Log.i("TAG", ">>>>>>>>>>>>>>>>>>>>>>>>>>>symbol not added ");
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.i("TAG", ">>>>>>>>>>>>>>>>>>>>>>>>>>>symbol not added " + e);
+                }
+            }).addOnCanceledListener(new OnCanceledListener() {
+                @Override
+                public void onCanceled() {
+                    Log.i("TAG", ">>>>>>>>>>>>>>>>>>>>>>>>>>>symbol not added ");
+                }
+            });
+
+        } else {
+            authOnCompleteUpdateInterface.onFireBaseUserUpdateFailure();
+            Log.i("TAG", ">>>>>>>>>>>>>>>>>>>>>>>>>>>symbol not added");
+        }
+    }
 
     public void signOut() {
         firebaseAuth.signOut();
