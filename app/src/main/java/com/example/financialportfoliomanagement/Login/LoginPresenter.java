@@ -1,8 +1,13 @@
 package com.example.financialportfoliomanagement.Login;
 
 import android.app.Activity;
+import android.util.Log;
 
-public class LoginPresenter implements LoginContract.Presenter, LoginContract.onLoginListener{
+/**
+ * Created by Ashish on 27-09-2017.
+ */
+
+public class LoginPresenter implements LoginContract.Presenter, LoginContract.onLoginListener {
     private LoginContract.View mLoginView;
     private LoginInteractor mLoginInteractor;
 
@@ -14,6 +19,7 @@ public class LoginPresenter implements LoginContract.Presenter, LoginContract.on
 
     @Override
     public void login(Activity activity, String email, String password) {
+        Log.i("TAG", email + " " + password);
         mLoginInteractor.performFirebaseLogin(activity, email, password);
 
     }
@@ -29,5 +35,4 @@ public class LoginPresenter implements LoginContract.Presenter, LoginContract.on
         mLoginView.onLoginFailure(message);
 
     }
-
 }

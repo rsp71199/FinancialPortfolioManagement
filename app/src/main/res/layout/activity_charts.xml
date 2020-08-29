@@ -1,49 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:backgroundTint="@color/DarkGray"
     android:orientation="vertical"
     android:layout_height="match_parent">
 
-
-    <com.github.mikephil.charting.charts.CandleStickChart
-        android:id="@+id/chart1"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="460dp"
-        android:layout_above="@+id/seekbar"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        android:layout_below="@+id/refresh"
-        android:layout_marginTop="40dp"
-        app:layout_constraintTop_toBottomOf="@+id/refresh"
-        tools:layout_editor_absoluteX="0dp" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/Black" />
 
-    <SeekBar
-        android:id="@+id/seekbar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
+    </com.google.android.material.appbar.AppBarLayout>
 
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chart1"></SeekBar>
+    <FrameLayout
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottomAppBar"
+        <androidx.cardview.widget.CardView
+            android:backgroundTint="@color/Black"
+            android:background="@color/Black"
+            android:id="@+id/candleChartCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-            app:navigationIcon="@drawable/ic_action_navigation_arrow_back"
-            app:menu="@menu/charts_bottom_appbar" />
+            android:elevation="10dp"
+            android:layout_height="400dp">
+
+            <com.github.mikephil.charting.charts.CandleStickChart
+                android:layout_margin="10dp"
+                android:id="@+id/candleChart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.cardview.widget.CardView>
 
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <androidx.cardview.widget.CardView
+            android:backgroundTint="@color/Black"
+            android:background="@color/Black"
+            android:id="@+id/lineChartCard"
+            android:layout_width="match_parent"
+            android:elevation="10dp"
+            android:layout_height="400dp">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:layout_margin="10dp"
+                android:id="@+id/lineChart"
+                android:layout_height="match_parent"
+
+                android:layout_width="match_parent" />
+        </androidx.cardview.widget.CardView>
+
+    </FrameLayout>
+
+
 </LinearLayout>

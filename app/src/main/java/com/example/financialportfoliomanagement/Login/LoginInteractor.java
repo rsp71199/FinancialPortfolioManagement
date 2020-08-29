@@ -8,7 +8,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginInteractor implements LoginContract.Intractor{
+
+public class LoginInteractor implements LoginContract.Intractor {
+
+
     private LoginContract.onLoginListener mOnLoginListener;
 
     public LoginInteractor(LoginContract.onLoginListener onLoginListener) {
@@ -29,8 +32,7 @@ public class LoginInteractor implements LoginContract.Intractor{
 
 
                         } else {
-                            mOnLoginListener.onFailure("oops! something went wrong");
-
+                            mOnLoginListener.onFailure(task.getException().getMessage());
                         }
                     }
                 });

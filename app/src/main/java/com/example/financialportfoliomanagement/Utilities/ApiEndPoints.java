@@ -8,4 +8,5 @@ public class ApiEndPoints {
     public static String TIME_SERIES_WEEKLY = "TIME_SERIES_WEEKLY";
     public static String TIME_SERIES_WEEKLY_ADJUSTED = "TIME_SERIES_WEEKLY_ADJUSTED";
     public static String TIME_SERIES_INTRADAY = "TIME_SERIES_INTRADAY";
+    public static String alphaApi = "B02L3PBPXDL1PUY4";
 }

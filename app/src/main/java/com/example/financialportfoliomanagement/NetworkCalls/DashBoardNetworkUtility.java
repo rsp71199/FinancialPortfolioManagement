@@ -1,7 +1,9 @@
 package com.example.financialportfoliomanagement.NetworkCalls;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -14,11 +16,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.financialportfoliomanagement.Adapters.IndexAdapter;
 import com.example.financialportfoliomanagement.Adapters.NewsAdapter;
 import com.example.financialportfoliomanagement.Adapters.TrendingTickersAdapter;
+import com.example.financialportfoliomanagement.Models.Index;
 import com.example.financialportfoliomanagement.Models.News;
 import com.example.financialportfoliomanagement.Models.TrendingTicker;
 import com.example.financialportfoliomanagement.Utilities.JSONFetcher;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,12 +44,13 @@ public class DashBoardNetworkUtility {
     private List<TrendingTicker> trendingTickersResults = new ArrayList<>();
     private RecyclerView.Adapter newsAdapter;
     private RecyclerView.Adapter trendingTickersAdapter;
+    private ProgressDialog progressDialog;
 
     Object object;
 
-    public DashBoardNetworkUtility(Context context) {
+    public DashBoardNetworkUtility(Context context, ProgressDialog progressDialog) {
         this.context = context;
-
+        this.progressDialog = progressDialog;
     }
 
     public void set_NSE_BSE(final TextView bse1, final TextView bse2, final TextView nse1, final TextView nse2) {
@@ -88,8 +98,8 @@ public class DashBoardNetworkUtility {
 
 
             //for bse
-            Log.i("TAG", bse.toString());
-            Log.i("TAG", nse.toString());
+//            Log.i("TAG", bse.toString());
+//            Log.i("TAG", nse.toString());
             JSONObject bse_regularMarketPrice_object = bse.getJSONObject("regularMarketPrice");
             String bse_regularMarketPrice_value = bse_regularMarketPrice_object.getString("fmt");
             JSONObject bse_regularMarketChangePercent_object = bse.getJSONObject("regularMarketChangePercent");
@@ -108,10 +118,15 @@ public class DashBoardNetworkUtility {
             String nse_regularMarketChange_value = nse_regularMarketChange_object.getString("fmt");
             nse1.setText(nse_regularMarketPrice_value);
             nse2.setText(nse_regularMarketChange_value + " (" + nse_regularMarketChangePercent_value + "%)");
+
+            if (progressDialog.isShowing()) {
+                progressDialog.cancel();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
 
     public void set_NSE_BSE_chart(String interval, String symbol, String range) {
@@ -157,7 +172,126 @@ public class DashBoardNetworkUtility {
         queue.add(request);
     }
 
-    public void set_NSE_BSE_chart_data() {
+    public void set_NSE_chart_data(final LineChart nse_chart) {
+        final ArrayList<Entry> nse_high = new ArrayList<>();
+
+        try {
+            JSONObject jsonObject_nse = new JSONObject(JSONFetcher.fetch(context, "dummy_nse_chart.json"));
+
+
+            //for nse
+
+            JSONObject chart = jsonObject_nse.getJSONObject("chart");
+            JSONArray result = chart.getJSONArray("result");
+            JSONObject resultElement = result.getJSONObject(0);
+            JSONObject indicators = resultElement.getJSONObject("indicators");
+            JSONArray quote = indicators.getJSONArray("quote");
+            JSONObject quoteElement = quote.getJSONObject(0);
+            JSONArray low = quoteElement.getJSONArray("low");
+            JSONArray volume = quoteElement.getJSONArray("volume");
+            final JSONArray high = quoteElement.getJSONArray("high");
+            JSONArray close = quoteElement.getJSONArray("close");
+            JSONArray open = quoteElement.getJSONArray("open");
+
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    nse_high.clear();
+                    try {
+                        for (int i = 0; i < high.length(); i++) {
+                            float val = (float) high.getLong(i);
+                            nse_high.add(new Entry(i * 0.001f, val));
+//                            Log.i("TAG", high.get(i).toString());
+                        }
+                        LineDataSet set1 = new LineDataSet(nse_high, "DataSet 1");
+
+                        set1.setColor(Color.GREEN);
+                        set1.setLineWidth(0.8f);
+                        set1.setDrawValues(false);
+                        set1.setDrawCircles(false);
+                        set1.setMode(LineDataSet.Mode.LINEAR);
+                        set1.setDrawFilled(true);
+                        LineData data = new LineData(set1);
+                        nse_chart.setData(data);
+                        Legend l = nse_chart.getLegend();
+                        l.setEnabled(false);
+                    } catch (Exception e) {
+
+                    }
+
+
+                }
+
+            };
+            r.run();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void set_BSE_chart_data(final LineChart bse_chart) {
+        final ArrayList<Entry> bse_high = new ArrayList<>();
+
+        try {
+            JSONObject jsonObject_nse = new JSONObject(JSONFetcher.fetch(context, "dummy_bse_chart.json"));
+
+
+            //for nse
+
+            JSONObject chart = jsonObject_nse.getJSONObject("chart");
+            JSONArray result = chart.getJSONArray("result");
+            JSONObject resultElement = result.getJSONObject(0);
+            JSONObject indicators = resultElement.getJSONObject("indicators");
+            JSONArray quote = indicators.getJSONArray("quote");
+            JSONObject quoteElement = quote.getJSONObject(0);
+            JSONArray low = quoteElement.getJSONArray("low");
+            JSONArray volume = quoteElement.getJSONArray("volume");
+            final JSONArray high_bse = quoteElement.getJSONArray("high");
+            JSONArray close = quoteElement.getJSONArray("close");
+            JSONArray open = quoteElement.getJSONArray("open");
+
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    bse_high.clear();
+                    try {
+                        for (int i = 0; i < high_bse.length(); i++) {
+                            float val = (float) high_bse.getLong(i);
+                            bse_high.add(new Entry(i * 0.001f, val));
+//                            Log.i("TAG", high_bse.get(i).toString());
+                        }
+                        LineDataSet set2 = new LineDataSet(bse_high, "DataSet 1");
+
+                        set2.setColor(Color.GREEN);
+                        set2.setLineWidth(0.8f);
+                        set2.setDrawValues(false);
+                        set2.setDrawCircles(false);
+                        set2.setMode(LineDataSet.Mode.LINEAR);
+                        set2.setDrawFilled(true);
+
+                        // create a data object with the data sets
+                        LineData data = new LineData(set2);
+
+                        // set data
+                        bse_chart.setData(data);
+
+                        // get the legend (only possible after setting data)
+                        Legend l = bse_chart.getLegend();
+                        l.setEnabled(false);
+                    } catch (Exception e) {
+
+                    }
+
+
+                }
+
+            };
+            r.run();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -217,7 +351,7 @@ public class DashBoardNetworkUtility {
                         trendingTickersResults.clear();
                         for (int i = 0; i < quote.length(); i++) {
                             JSONObject quoteElement = new JSONObject(quote.get(i).toString());
-                            Log.i("TAG", quoteElement.toString());
+//                            Log.i("TAG", quoteElement.toString());
                             trendingTickersResults.add(new TrendingTicker(quoteElement.getString("shortName")
                                     , quoteElement.getString("regularMarketPrice")
                                     , quoteElement.getString("regularMarketChange")
@@ -234,7 +368,7 @@ public class DashBoardNetworkUtility {
             r.run();
 
 
-            Log.i("TAG", object.toString());
+//            Log.i("TAG", object.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -316,5 +450,47 @@ public class DashBoardNetworkUtility {
         };
 
         r.run();
+    }
+
+    public void set_index_recycler_view_data(final RecyclerView indexRecyclerView, final Context context) {
+
+        final List<Index> indexList = new ArrayList<>();
+        try {
+            JSONObject res = new JSONObject(JSONFetcher.fetch(context, "dummy_summary.json"));
+            JSONObject marketSummaryResponse = res.getJSONObject("marketSummaryResponse");
+            final JSONArray result = marketSummaryResponse.getJSONArray("result");
+            new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        for (int i = 0; i < result.length(); i++) {
+                            JSONObject element = result.getJSONObject(i);
+                            String fullExchangeName = element.getString("fullExchangeName");
+                            String regularMarketChangePercent = element.getJSONObject("regularMarketChangePercent").getString("fmt");
+                            String regularMarketChangePercentRaw = element.getJSONObject("regularMarketChangePercent").getString("raw");
+                            String regularMarketPrice = element.getJSONObject("regularMarketPrice").getString("raw");
+                            String regularMarketChange = element.getJSONObject("regularMarketChange").getString("fmt");
+                            String regularMarketPreviousClose = element.getJSONObject("regularMarketPreviousClose").getString("raw");
+                            boolean b = false;
+                            float percent = Float.parseFloat(regularMarketChangePercentRaw);
+                            if (percent <= 0) b = true;
+                            indexList.add(new Index(fullExchangeName
+                                    , regularMarketPrice
+                                    , regularMarketChange + " (" + regularMarketChangePercent + ")"
+                                    , regularMarketPreviousClose, b));
+
+                            Log.i("TAG", fullExchangeName);
+                        }
+
+                        IndexAdapter indexAdapter = new IndexAdapter(indexList, context);
+                        indexRecyclerView.setAdapter(indexAdapter);
+                    } catch (Exception e) {
+
+                    }
+                }
+            }.run();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

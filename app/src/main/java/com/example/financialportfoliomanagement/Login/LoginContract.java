@@ -2,8 +2,8 @@ package com.example.financialportfoliomanagement.Login;
 
 import android.app.Activity;
 
-public class LoginContract {
-    public interface View {
+public interface LoginContract {
+    interface View {
         void onLoginSuccess(String message);
 
         void onLoginFailure(String message);

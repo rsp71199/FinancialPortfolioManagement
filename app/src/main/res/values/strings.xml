@@ -2,8 +2,7 @@
 <resources>
 
     <string name="app_name">FPMA</string>
-    <string name="open">open</string>
-    <string name="close">close</string>
+
     <string name="viewGithub">View on GitHub</string>
     <string name="reportProblem">Problem Report</string>
     <string name="viewWebsite">Developer Website</string>
@@ -52,10 +51,7 @@
     <string name="dash">-</string>
     <string name="scrollViewStart">START OF SCROLLVIEW</string>
     <string name="scrollViewEnd">END OF SCROLLVIEW</string>
-    <string name="home">home</string>
-    <string name="commentary">commentary</string>
-    <string name="report">report</string>
-    <string name="Register">Register</string>
-    <string name="Login">Login</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

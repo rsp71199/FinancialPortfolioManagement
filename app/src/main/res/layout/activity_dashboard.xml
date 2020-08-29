@@ -10,239 +10,246 @@
     android:layout_gravity="top"
 
     tools:context=".Activities.DashboardActivity">
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:orientation="vertical"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    android:layout_gravity="top"-->
-
-<!--    tools:context=".Activities.DashboardActivity">-->
-
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:menu="@menu/navigation_menu"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header"
-        android:id="@+id/navbar"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-
-        android:layout_marginBottom="10dp"
-        android:gravity="top"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/sensex_card"
-            android:layout_width="match_parent"
-            app:cardCornerRadius="10dp"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@color/LightGrey"
-            app:cardElevation="20dp"
-            android:layout_height="100dp">
-
-            <LinearLayout
-
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:weightSum="2"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:weightSum="2"
-                        android:layout_gravity="center"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/sensex_title"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="sensex"
-                            android:textAlignment="center"
-                            android:textAllCaps="true"
-                            android:layout_width="match_parent"
-                            android:textColor="@color/Black"
-                            android:layout_height="match_parent">
-
-                        </TextView>
-
-                        <TextView
-                            android:id="@+id/sensex_regularMarketPrice"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="38799.8"
-                            android:textAlignment="center"
-                            android:textAllCaps="true"
-                            android:textColor="@color/Black"></TextView>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        app:cardBackgroundColor="@color/DarkGreen"
-                        app:cardCornerRadius="7dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/sensex_marketPriceChange"
-                            android:text="356.6 (0.85%)"
-                            android:textColor="@color/White"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                        </TextView>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-
-            android:layout_width="match_parent"
-            app:cardCornerRadius="10dp"
-            android:id="@+id/nifty_card"
-            android:layout_height="100dp"
-            android:layout_margin="10dp"
-            app:cardBackgroundColor="@color/LightGrey"
-            app:cardElevation="20dp"
-            android:layout_weight="1">
-
-            <LinearLayout
-
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:weightSum="2"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:weightSum="2"
-                        android:layout_gravity="center"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/nifty_title"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="NIFTY50"
-                            android:textAlignment="center"
-                            android:textAllCaps="true"
-                            android:layout_width="match_parent"
-                            android:textColor="@color/Black"
-                            android:layout_height="match_parent">
-
-                        </TextView>
-
-                        <TextView
-                            android:id="@+id/nifty_regularMarketPrice"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="38799.8"
-                            android:textAlignment="center"
-                            android:textAllCaps="true"
-                            android:layout_width="match_parent"
-                            android:textColor="@color/Black"
-                            android:layout_height="match_parent"></TextView>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        app:cardBackgroundColor="@color/DarkGreen"
-                        app:cardCornerRadius="7dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/nifty_marketPriceChange"
-                            android:text="356.6 (0.85%)"
-                            android:textColor="@color/White"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                        </TextView>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:gravity="top"
-        android:orientation="vertical"
-
-        android:layout_gravity="top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <LinearLayout
             android:layout_gravity="top"
-            android:gravity="top"
+
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
+            android:gravity="top"
+            android:weightSum="2"
             android:layout_height="wrap_content">
 
             <androidx.cardview.widget.CardView
-                android:elevation="20dp"
+                android:id="@+id/sensex_card"
+                android:layout_width="match_parent"
+                app:cardCornerRadius="10dp"
+                android:layout_margin="10dp"
                 app:cardBackgroundColor="@color/Black"
+                app:cardElevation="20dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+
+            <LinearLayout
+
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp">
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/bse_chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+
+                            android:layout_gravity="center"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/sensex_title"
+                                android:layout_weight="1"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textAlignment="center"
+                                android:textAllCaps="true"
+                                android:layout_width="match_parent"
+                                android:text="sensex"
+                                android:textColor="@color/White"
+                                android:layout_height="match_parent">
+
+                        </TextView>
+
+                            <TextView
+                                android:id="@+id/sensex_regularMarketPrice"
+                                android:layout_weight="1"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textAlignment="center"
+                                android:textAllCaps="true"
+                                android:layout_width="match_parent"
+                                android:text="38799.8"
+                                android:textColor="@color/White"
+                                android:layout_height="match_parent"></TextView>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_margin="10dp"
+                            app:cardBackgroundColor="@color/DarkGreen"
+                            app:cardCornerRadius="7dp"
+                            app:cardElevation="0dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_margin="5dp"
+                                android:id="@+id/sensex_marketPriceChange"
+                                android:text="356.6 (0.85%)"
+                                android:textColor="@color/White"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                            </TextView>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+
+                android:layout_width="match_parent"
+                app:cardCornerRadius="10dp"
+                android:id="@+id/nifty_card"
+                android:layout_margin="10dp"
+                app:cardBackgroundColor="@color/Black"
+                app:cardElevation="20dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp">
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/nse_chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+
+                    <LinearLayout
+
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+
+                            android:layout_gravity="center"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/nifty_title"
+                                android:layout_weight="1"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textAlignment="center"
+                                android:textAllCaps="true"
+                                android:layout_width="match_parent"
+                                android:text="NIFTY50"
+                                android:textColor="@color/White"
+                                android:layout_height="match_parent">
+
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/nifty_regularMarketPrice"
+                                android:layout_weight="1"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textAlignment="center"
+                                android:textAllCaps="true"
+                                android:layout_width="match_parent"
+                                android:text="38799.8"
+                                android:textColor="@color/White"
+                                android:layout_height="match_parent"></TextView>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_margin="10dp"
+                            app:cardBackgroundColor="@color/DarkGreen"
+                            app:cardCornerRadius="7dp"
+                            android:layout_width="match_parent"
+                            app:cardElevation="0dp"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_margin="5dp"
+                                android:id="@+id/nifty_marketPriceChange"
+                                android:text="356.6 (0.85%)"
+                                android:textColor="@color/White"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                            </TextView>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="top"
+            android:orientation="vertical"
+
+            android:layout_gravity="top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_gravity="top"
+                android:gravity="top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <androidx.cardview.widget.CardView
+                    android:elevation="20dp"
+                    app:cardBackgroundColor="@color/Black"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="Trending tickers"
-                    android:textColor="@color/White">
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_margin="10dp"
+                        android:text="Trending tickers"
+                        android:textColor="@color/White"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
                 </TextView>
 
@@ -250,71 +257,67 @@
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/trending"
-            android:layout_width="match_parent"
-            android:layout_height="118dp"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-    </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:gravity="top"
-            android:orientation="vertical">
-
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_margin="10dp"
+                android:id="@+id/trending"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:gravity="top">
+                android:layout_height="170dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="20dp"
-                    app:cardBackgroundColor="@color/Black">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:text="News"
-                        android:textColor="@color/White">
-
-                    </TextView>
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
+            </androidx.recyclerview.widget.RecyclerView>
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/news"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_gravity="top"
+            android:gravity="top"
             android:layout_width="match_parent"
-            android:layout_height="165dp"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-        </androidx.recyclerview.widget.RecyclerView>
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:visibility="visible"
-            app2:itemIconTint="@drawable/nav_item_color_state"
-            app2:itemTextColor="@drawable/nav_item_color_state"
-            app2:menu="@menu/my_bottom_navigation_items" />
+            <LinearLayout
+                android:layout_gravity="top"
+                android:gravity="top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:elevation="20dp"
+                    app:cardBackgroundColor="@color/Black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_margin="10dp"
+                        android:text="News"
+                        android:textColor="@color/White"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                </TextView>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_margin="10dp"
+                android:id="@+id/news"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
 
     </LinearLayout>
 
-
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        app:menu="@menu/navigation_menu"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        android:id="@+id/navbar" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

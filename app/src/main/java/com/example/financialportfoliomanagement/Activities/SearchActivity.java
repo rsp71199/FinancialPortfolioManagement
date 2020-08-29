@@ -1,6 +1,7 @@
 package com.example.financialportfoliomanagement.Activities;
 
 import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -8,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +22,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.financialportfoliomanagement.Adapters.SearchAdapter;
+import com.example.financialportfoliomanagement.Auth.Auth;
+import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteRetreiveInterface;
+import com.example.financialportfoliomanagement.Models.SearchResult;
 import com.example.financialportfoliomanagement.R;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
@@ -35,17 +41,36 @@ public class SearchActivity extends AppCompatActivity {
     MaterialSearchView searchView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<com.example.fpma.Models.SearchResult> searchResults = new ArrayList<>();
+    private List<SearchResult> searchResults = new ArrayList<>();
     private ProgressDialog progressDialog;
+    private Toolbar toolbar;
+    private Auth auth;
+    private String from;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         progressDialog = new ProgressDialog(this);
         setContentView(R.layout.activity_main);
+        from = getIntent().getStringExtra("from");
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        init();
-        networkCall("A");
+        auth = new Auth();
+        auth.getUser(new AuthOnCompleteRetreiveInterface() {
+            @Override
+            public void onFireBaseUserRetrieveSuccess() {
+                init();
+                networkCall("A");
+            }
+
+            @Override
+            public void onFireBaseUserRetrieveFailure() {
+
+            }
+        });
+
     }
 
     @Override
@@ -61,7 +86,7 @@ public class SearchActivity extends AppCompatActivity {
         progressDialog.show();
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + symbol + "&apikey=B02L3PBPXDL1PUY4";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -70,9 +95,9 @@ public class SearchActivity extends AppCompatActivity {
                         try {
                             final JSONObject json = new JSONObject(response);
                             final JSONArray jsonArray = json.getJSONArray("bestMatches");
-                            Log.i("TAG", "????????????????????????" + jsonArray.length());
+//                            Log.i("TAG", response);
                             final Handler handler = new Handler();
-
+                            final List<String> user_watch_list = auth.user.getWatch_list_symbols();
                             final Runnable r = new Runnable() {
                                 public void run() {
                                     searchResults.clear();
@@ -80,13 +105,16 @@ public class SearchActivity extends AppCompatActivity {
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject jsonElement = jsonArray.getJSONObject(i);
                                             String sym = jsonElement.get("1. symbol").toString();
-                                                String equityName = jsonElement.get("2. name").toString();
-                                            searchResults.add(new com.example.fpma.Models.SearchResult(equityName, sym));
+                                            String equityName = jsonElement.get("2. name").toString();
+                                            boolean b = user_watch_list != null && user_watch_list.contains(sym);
+
+                                            searchResults.add(new SearchResult(equityName, sym, b));
+//                                            Log.i("TAG", equityName);
                                         }
                                     } catch (Exception e) {
 
                                     }
-                                    mAdapter = new SearchAdapter(searchResults, getApplicationContext());
+                                    mAdapter = new SearchAdapter(searchResults, getApplicationContext(), auth);
                                     recyclerView.setAdapter(mAdapter);
                                 }
                             };
@@ -99,7 +127,7 @@ public class SearchActivity extends AppCompatActivity {
                         }
 
 
-                        Log.i("TAG", response.toString());
+//                        Log.i("TAG", response.toString());
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -147,7 +175,10 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL);
+        Drawable verticalDivider = ContextCompat.getDrawable(this, R.drawable.shape);
+        dividerItemDecoration.setDrawable(verticalDivider);
+        recyclerView.addItemDecoration(dividerItemDecoration);
     }
 }
