@@ -20,6 +20,7 @@ import com.example.financialportfoliomanagement.Auth.Auth;
 import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteRetreiveInterface;
 import com.example.financialportfoliomanagement.Models.User;
 import com.example.financialportfoliomanagement.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -41,6 +42,7 @@ public class DashBoardActivity2 extends AppCompatActivity {
         auth = new Auth();
         setTabLayout();
         setSideNavigation();
+        setBottomNavigation();
         auth.getUser(new AuthOnCompleteRetreiveInterface() {
             @Override
             public void onFireBaseUserRetrieveSuccess() {
@@ -57,8 +59,29 @@ public class DashBoardActivity2 extends AppCompatActivity {
         });
     }
 
-
-    private void setSideNavigation() {
+    private void setBottomNavigation(){
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.home_tab:
+                        Toast.makeText(DashBoardActivity2.this, "Home", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.commentary:
+                        Toast.makeText(DashBoardActivity2.this, "Commentary", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(DashBoardActivity2.this, Commentary.class);
+                        startActivity(i);
+                        break;
+                    case R.id.report:
+                        Toast.makeText(DashBoardActivity2.this, "Reports", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+    protected void setSideNavigation() {
         drawerLayout = (DrawerLayout) findViewById(R.id.activity_dashboard);
         actionBarDrawerToggle =
                 new ActionBarDrawerToggle(this, drawerLayout, R.string.actionToggleCircles, R.string.actionAddDataSet);
