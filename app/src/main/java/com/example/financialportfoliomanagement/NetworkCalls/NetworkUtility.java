@@ -149,7 +149,6 @@ public class NetworkUtility {
             onIndexDataRetrieveInterface.onIndexDataRetrieveFailure();
         }
     }
-
     public void get_search_result(String symbol) {
         final List<SearchResult> searchResults = new ArrayList<>();
         RequestQueue queue = Volley.newRequestQueue(context);

@@ -132,7 +132,6 @@ public class DashBoardActivity extends AppCompatActivity {
         viewPager.setAdapter(dashBoardFragmentAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
     }
-
     private void setListeners(){
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -149,7 +148,6 @@ public class DashBoardActivity extends AppCompatActivity {
             }
         });
     }
-
     private void changeLoginStatus(boolean isLoggedIn) {
         MenuItem loginItem = sideNavigationMenu.findItem(R.id.login);
         MenuItem watchListItem = sideNavigationMenu.findItem(R.id.watchlist);
