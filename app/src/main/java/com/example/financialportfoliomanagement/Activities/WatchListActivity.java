@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.financialportfoliomanagement.Adapters.WatchListAdapter;
 import com.example.financialportfoliomanagement.Auth.Auth;
 import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteRetreiveInterface;
-import com.example.financialportfoliomanagement.Listners.WatchListDataListner;
+import com.example.financialportfoliomanagement.Interfaces.WatchListDataRetrieveInterface;
 import com.example.financialportfoliomanagement.Models.WatchListItem;
 import com.example.financialportfoliomanagement.NetworkCalls.WatchListAsyncTask;
 import com.example.financialportfoliomanagement.R;
@@ -52,7 +52,7 @@ public class WatchListActivity extends AppCompatActivity {
 
                 recyclerViewSetter();
                 watchListAsyncTask = new WatchListAsyncTask(getApplication(), auth.user.getWatch_list_symbols(), progressDialog);
-                watchListAsyncTask.setWatchListDataListner(new WatchListDataListner() {
+                watchListAsyncTask.setWatchListDataRetrieveInterface(new WatchListDataRetrieveInterface() {
                     @Override
                     public void onDataFetched(List<WatchListItem> listItems) {
                         mAdapter = new WatchListAdapter(listItems, getApplication(), auth, progressDialog);
