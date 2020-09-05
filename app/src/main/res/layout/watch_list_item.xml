@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:weightSum="2"
-    android:backgroundTint="@color/primaryLight"
+    android:backgroundTint="@color/primary"
     android:background="@color/primaryExtraLight"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -111,7 +111,7 @@
 
             <ImageButton
                 android:id="@+id/delete_watch_item"
-                android:backgroundTint="@color/primaryLight"
+                android:backgroundTint="@color/primary"
                 android:src="@drawable/options_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">

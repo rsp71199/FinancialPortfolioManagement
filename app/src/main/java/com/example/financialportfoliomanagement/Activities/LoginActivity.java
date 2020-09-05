@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void onLoginSuccess(String message) {
         progressDialog.dismiss();
-        Intent intent = new Intent(LoginActivity.this, DashBoardActivity2.class);
+        Intent intent = new Intent(LoginActivity.this, DashBoardActivity.class);
         startActivity(intent);
         finish();
     }

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:background="@color/primaryLight"
+    android:background="@color/primary"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -53,7 +53,6 @@
             <ImageButton
                 android:id="@+id/add_to_list"
                 android:backgroundTint="@color/Black"
-                android:src="@drawable/options"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"></ImageButton>
         </LinearLayout>

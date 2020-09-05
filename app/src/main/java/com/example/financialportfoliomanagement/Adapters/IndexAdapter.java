@@ -24,6 +24,10 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.MyViewHolder
         this.mDataset = mDataset;
         this.context = context;
     }
+    public void refresh(List<Index> indexList){
+        mDataset = indexList;
+        notifyDataSetChanged();
+    }
 
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

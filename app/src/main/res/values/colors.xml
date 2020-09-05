@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaryLight">#212121</color>
-    <color name="primaryExtraLight">#424242</color>
+    <color name="primary">#212121</color>
+    <color name="primaryExtraLight">#FFFFFF</color>
     <color name="primaryExtraLight2">#616161</color>
     <color name="tertiary">#6b7f2a</color>
     <color name="tertiaryLight">#a4c639</color>
-    <color name="tertiaryExtraLight">#b5cf5e</color>
+    <color name="secondary">#b5cf5e</color>
     <color name="secondaryLight">#373f1a</color>
     <color name="secondaryExtraLight">#d5e29f</color>
     <color name="White">#FFFFFF</color>

@@ -24,7 +24,9 @@ import com.android.volley.toolbox.Volley;
 import com.example.financialportfoliomanagement.Adapters.SearchAdapter;
 import com.example.financialportfoliomanagement.Auth.Auth;
 import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteRetreiveInterface;
+import com.example.financialportfoliomanagement.Interfaces.OnSearchResultRetrieveInterface;
 import com.example.financialportfoliomanagement.Models.SearchResult;
+import com.example.financialportfoliomanagement.NetworkCalls.NetworkUtility;
 import com.example.financialportfoliomanagement.R;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
@@ -39,40 +41,73 @@ public class SearchActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     MaterialSearchView searchView;
-    private RecyclerView.Adapter mAdapter;
+    private SearchAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<SearchResult> searchResults = new ArrayList<>();
-    private ProgressDialog progressDialog;
     private Toolbar toolbar;
     private Auth auth;
     private String from;
+    private NetworkUtility networkUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        progressDialog = new ProgressDialog(this);
-        setContentView(R.layout.activity_main);
-        from = getIntent().getStringExtra("from");
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        searchView = (MaterialSearchView) findViewById(R.id.search_view);
-        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        setAuth();
+    }
+
+    private void setAuth(){
         auth = new Auth();
         auth.getUser(new AuthOnCompleteRetreiveInterface() {
             @Override
             public void onFireBaseUserRetrieveSuccess() {
                 init();
-                networkCall("A");
             }
 
             @Override
             public void onFireBaseUserRetrieveFailure() {
+                auth=null;
+                init();
+            }
+        });
+    }
+    private void setLayout(){
+        setContentView(R.layout.activity_search);
+        from = getIntent().getStringExtra("from");
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        searchView = (MaterialSearchView) findViewById(R.id.search_view);
+        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+    }
+    private void setNetworkUtility(){
+        networkUtility = new NetworkUtility(this,auth);
+        networkUtility.setOnSearchResultRetrieveInterface(new OnSearchResultRetrieveInterface() {
+            @Override
+            public void onSearchResultRetrieveSuccess(List<SearchResult> searchResultList) {
+                if(mAdapter==null){
+                    mAdapter = new SearchAdapter(searchResultList,getApplication(),auth);
+                    recyclerView.setAdapter(mAdapter);
+                }else{
+                    mAdapter.refresh(searchResultList);
+                }
+            }
+
+            @Override
+            public void onSearchResultRetrieveFailure() {
 
             }
         });
-
+        networkUtility.get_search_result("A");
     }
-
+    private void recyclerViewSetter() {
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL);
+        Drawable verticalDivider = ContextCompat.getDrawable(this, R.drawable.shape);
+        dividerItemDecoration.setDrawable(verticalDivider);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -81,79 +116,20 @@ public class SearchActivity extends AppCompatActivity {
         return true;
     }
 
-    public void networkCall(String symbol) {
-        progressDialog.setTitle("Loading search results...");
-        progressDialog.show();
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + symbol + "&apikey=B02L3PBPXDL1PUY4";
-        final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.\
 
-                        try {
-                            final JSONObject json = new JSONObject(response);
-                            final JSONArray jsonArray = json.getJSONArray("bestMatches");
-//                            Log.i("TAG", response);
-                            final Handler handler = new Handler();
-                            final List<String> user_watch_list = auth.user.getWatch_list_symbols();
-                            final Runnable r = new Runnable() {
-                                public void run() {
-                                    searchResults.clear();
-                                    try {
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject jsonElement = jsonArray.getJSONObject(i);
-                                            String sym = jsonElement.get("1. symbol").toString();
-                                            String equityName = jsonElement.get("2. name").toString();
-                                            boolean b = user_watch_list != null && user_watch_list.contains(sym);
-
-                                            searchResults.add(new SearchResult(equityName, sym, b));
-//                                            Log.i("TAG", equityName);
-                                        }
-                                    } catch (Exception e) {
-
-                                    }
-                                    mAdapter = new SearchAdapter(searchResults, getApplicationContext(), auth);
-                                    recyclerView.setAdapter(mAdapter);
-                                }
-                            };
-                            r.run();
-                        } catch (JSONException e) {
-
-                            e.printStackTrace();
-                        } finally {
-                            progressDialog.cancel();
-                        }
-
-
-//                        Log.i("TAG", response.toString());
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressDialog.cancel();
-                Log.i("TAG", error.toString());
-            }
-        });
-
-// Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
 
     private void init() {
+        setLayout();
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //Do some magic
-
-                networkCall(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //Do some magic
+                networkUtility.get_search_result(newText);
                 return false;
             }
         });
@@ -169,16 +145,8 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
         recyclerViewSetter();
+        setNetworkUtility();
     }
 
-    private void recyclerViewSetter() {
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL);
-        Drawable verticalDivider = ContextCompat.getDrawable(this, R.drawable.shape);
-        dividerItemDecoration.setDrawable(verticalDivider);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-    }
+
 }

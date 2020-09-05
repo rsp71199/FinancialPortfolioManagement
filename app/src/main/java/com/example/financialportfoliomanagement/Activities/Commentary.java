@@ -30,7 +30,7 @@ public class Commentary extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.home_tab:
                         Toast.makeText(Commentary.this, "Home", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(Commentary.this, DashBoardActivity2.class);
+                        Intent i = new Intent(Commentary.this, DashBoardActivity.class);
                         startActivity(i);
                         break;
                     case R.id.commentary:

@@ -145,7 +145,7 @@
     <com.google.android.material.navigation.NavigationView
     android:layout_width="300dp"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/primaryLight"
+    android:backgroundTint="@color/primary"
     app:itemTextColor="@color/White"
     app:itemIconTint="@color/White"
     app:menu="@menu/navigation_menu"

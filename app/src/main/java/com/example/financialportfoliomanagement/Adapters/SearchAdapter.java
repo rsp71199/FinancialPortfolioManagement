@@ -24,6 +24,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
     private List<SearchResult> mDataset;
     private Context context;
     private Auth auth;
+
+    public void refresh(List<SearchResult> searchResultList){
+        mDataset = searchResultList;
+        notifyDataSetChanged();
+    }
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -81,31 +86,36 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
                 context.startActivity(i);
             }
         });
-        holder.add_to_list.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mDataset.get(position).added_to_list == false) {
-                    auth.user.add_watch_list_item(mDataset.get(position).symbol);
-                    auth.setUser(new AuthOnCompleteUpdateInterface() {
-                        @Override
-                        public void onFireBaseUserUpdateSuccess() {
-                            Toast.makeText(context, "Added to watch list", Toast.LENGTH_LONG);
-                            holder.add_to_list.setImageResource(R.drawable.options_added);
+        if(auth!=null){
+            holder.add_to_list.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mDataset.get(position).added_to_list == false) {
+                        auth.user.add_watch_list_item(mDataset.get(position).symbol);
+                        auth.setUser(new AuthOnCompleteUpdateInterface() {
+                            @Override
+                            public void onFireBaseUserUpdateSuccess() {
+                                Toast.makeText(context, "Added to watch list", Toast.LENGTH_LONG);
+                                holder.add_to_list.setImageResource(R.drawable.options_added);
 
-                        }
+                            }
 
-                        @Override
-                        public void onFireBaseUserUpdateFailure() {
-                            Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG);
-                        }
-                    }, auth.user);
+                            @Override
+                            public void onFireBaseUserUpdateFailure() {
+                                Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG);
+                            }
+                        }, auth.user);
+                    }
                 }
+            });
+            if (mDataset.get(position).added_to_list) {
+                holder.add_to_list.setImageResource(R.drawable.options_added);
+            }else{
+                holder.add_to_list.setImageResource(R.drawable.options);
             }
-        });
-        if (mDataset.get(position).added_to_list) {
-            holder.add_to_list.setImageResource(R.drawable.options_added);
-
         }
+
+
         holder.searchName.setText(mDataset.get(position).name);
         holder.searchSymbol.setText(mDataset.get(position).symbol);
 
