@@ -41,10 +41,12 @@ public class User {
 
     public boolean add_watch_list_item(String symbol) {
         if (this.watch_list_symbols != null) {
+            if(this.watch_list_symbols.size()==20)return false;
             if (!this.watch_list_symbols.contains(symbol)) {
                 watch_list_symbols.add(symbol);
                 return true;
             }
+
             return false;
         }
         return false;

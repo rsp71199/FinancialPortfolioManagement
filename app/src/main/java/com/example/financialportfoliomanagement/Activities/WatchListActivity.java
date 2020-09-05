@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -81,23 +82,9 @@ public class WatchListActivity extends AppCompatActivity {
 
     }
 
-    private void recyclerViewSetter() {
-        recyclerView = findViewById(R.id.my_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL);
-        Drawable verticalDivider = ContextCompat.getDrawable(this, R.drawable.shape);
-        dividerItemDecoration.setDrawable(verticalDivider);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.dashboard_menu, menu);
+        getMenuInflater().inflate(R.menu.watch_list_menu, menu);
 //        MenuItem item = menu.findItem(R.id.action_search);
 
 
@@ -112,9 +99,10 @@ public class WatchListActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.search: {
-                Intent i = new Intent(this, SearchActivity.class);
-                startActivity(i);
+            case R.id.analyze: {
+                Toast.makeText(this, "Analyzing", Toast.LENGTH_SHORT).show();
+//                Intent i = new Intent(this, SearchActivity.class);
+//                startActivity(i);
                 break;
             }
             case R.id.refresh: {
@@ -133,5 +121,18 @@ public class WatchListActivity extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
         if (mAdapter != null) mAdapter.refresh();
+    }
+
+    private void recyclerViewSetter() {
+        recyclerView = findViewById(R.id.my_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL);
+        Drawable verticalDivider = ContextCompat.getDrawable(this, R.drawable.shape);
+        dividerItemDecoration.setDrawable(verticalDivider);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
     }
 }

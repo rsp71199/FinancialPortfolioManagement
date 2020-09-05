@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/analyze"
+        android:icon="@drawable/analyze"
+        android:title="Analyze"
+        android:contentDescription="content_description_analyze"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/refresh"
+        android:icon="@drawable/refresh"
+        android:title="Refresh"
+        android:contentDescription="content_description_refresh"
+        app:showAsAction="ifRoom" />
+
+
+</menu>

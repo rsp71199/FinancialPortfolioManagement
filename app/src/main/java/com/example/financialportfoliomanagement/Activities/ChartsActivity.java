@@ -31,6 +31,7 @@ public class ChartsActivity extends AppCompatActivity {
     private String TAG = "chartsActivity";
     private String FUNCTION = ApiEndPoints.TIME_SERIES_INTRADAY;
     private String SYMBOL;
+    private String from;
     private String INTERVAL = "5min";
     private ProgressDialog progressDialog;
     int current_chart_id = 0;
@@ -44,9 +45,9 @@ public class ChartsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        SYMBOL = "IBM";
         SYMBOL = intent.getStringExtra("SYMBOL");
         setTitle("Charts");
-        SYMBOL = "IBM";
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading...");
         chartsNetworkUtility = new ChartsNetworkUtility(this);
@@ -57,74 +58,6 @@ public class ChartsActivity extends AppCompatActivity {
         chartsNetworkUtility.setChart(lineChart, candleStickChart, SYMBOL
                 , FUNCTION, INTERVAL, ApiEndPoints.alphaApi, current_chart_id, progressDialog);
     }
-
-
-    private void setCandleChart() {
-        ChartMarker chartMarker = new ChartMarker(this, R.layout.tool_tip);
-        candleCard = findViewById(R.id.candleChartCard);
-        candleStickChart = findViewById(R.id.candleChart);
-        candleStickChart.setBackgroundColor(Color.BLACK);
-        candleStickChart.getDescription().setEnabled(false);
-//        candleStickChart.setMaxVisibleValueCount(60);
-        candleStickChart.setPinchZoom(true);
-        candleStickChart.setBorderColor(Color.BLACK);
-        candleStickChart.setDrawGridBackground(false);
-//        candleStickChart.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
-        candleStickChart.setClickable(true);
-        candleStickChart.setMarker(chartMarker);
-        XAxis xAxis = candleStickChart.getXAxis();
-        xAxis.setDrawAxisLine(false);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextColor(Color.WHITE);
-        xAxis.setLabelCount(4);
-        xAxis.setDrawGridLines(false);
-        YAxis leftAxis = candleStickChart.getAxisLeft();
-        leftAxis.setDrawAxisLine(false);
-        leftAxis.setLabelCount(7, false);
-        leftAxis.setDrawGridLines(true);
-        leftAxis.setGridColor(Color.LTGRAY);
-        leftAxis.setGridColor(R.color.White);
-        leftAxis.setGridLineWidth(0.5f);
-//        leftAxis.setDrawAxisLine(true);
-        leftAxis.setTextColor(Color.WHITE);
-        YAxis rightAxis = candleStickChart.getAxisRight();
-        rightAxis.setEnabled(false);
-        candleStickChart.getLegend().setEnabled(false);
-
-    }
-
-    @SuppressLint("ResourceAsColor")
-    private void setLineChart() {
-        lineCard = findViewById(R.id.lineChartCard);
-        ChartMarker chartMarker = new ChartMarker(this, R.layout.tool_tip);
-        lineChart = findViewById(R.id.lineChart);
-        lineChart.setBackgroundColor(R.color.primaryExtraLight);
-        lineChart.setDrawGridBackground(false);
-        lineChart.getDescription().setEnabled(true);
-        lineChart.setMarker(chartMarker);
-        lineChart.setBorderColor(Color.BLACK);
-        lineChart.setTouchEnabled(true);
-        lineChart.setDragEnabled(true);
-        lineChart.setScaleEnabled(true);
-        lineChart.setPinchZoom(true);
-        lineChart.getAxisLeft().setDrawAxisLine(false);
-        lineChart.getAxisLeft().setDrawGridLines(true);
-        lineChart.getAxisLeft().setGridLineWidth(0.5f);
-        lineChart.getAxisLeft().setGridColor(R.color.White);
-        lineChart.getAxisRight().setEnabled(false);
-        lineChart.getAxisLeft().setDrawLabels(true);
-        lineChart.getAxisLeft().setTextColor(Color.WHITE);
-        lineChart.getAxisRight().setDrawLabels(false);
-        lineChart.getXAxis().setDrawLabels(true);
-        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        lineChart.getXAxis().setLabelCount(4, true);
-        lineChart.getXAxis().setDrawGridLines(false);
-        lineChart.getXAxis().setDrawAxisLine(false);
-        lineChart.getXAxis().setTextColor(Color.WHITE);
-
-
-    }
-
 
     @Override
     protected void onStop() {
@@ -142,11 +75,7 @@ public class ChartsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         switch (id) {
             case R.id.search: {
                 Intent i = new Intent(this, SearchActivity.class);
@@ -224,5 +153,67 @@ public class ChartsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setCandleChart() {
+        ChartMarker chartMarker = new ChartMarker(this, R.layout.tool_tip);
+        candleCard = findViewById(R.id.candleChartCard);
+        candleStickChart = findViewById(R.id.candleChart);
+        candleStickChart.setBackgroundColor(Color.BLACK);
+        candleStickChart.getDescription().setEnabled(false);
+        candleStickChart.setPinchZoom(true);
+        candleStickChart.setBorderColor(Color.BLACK);
+        candleStickChart.setDrawGridBackground(false);
+        candleStickChart.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
+        candleStickChart.setClickable(true);
+        candleStickChart.setMarker(chartMarker);
+        XAxis xAxis = candleStickChart.getXAxis();
+        xAxis.setDrawAxisLine(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setLabelCount(4);
+        xAxis.setDrawGridLines(false);
+        YAxis leftAxis = candleStickChart.getAxisLeft();
+        leftAxis.setDrawAxisLine(false);
+        leftAxis.setLabelCount(7, false);
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setGridColor(Color.LTGRAY);
+        leftAxis.setGridColor(R.color.White);
+        leftAxis.setGridLineWidth(0.5f);
+        leftAxis.setTextColor(Color.WHITE);
+        YAxis rightAxis = candleStickChart.getAxisRight();
+        rightAxis.setEnabled(false);
+        candleStickChart.getLegend().setEnabled(false);
+
+    }
+    @SuppressLint("ResourceAsColor")
+    private void setLineChart() {
+        lineCard = findViewById(R.id.lineChartCard);
+        ChartMarker chartMarker = new ChartMarker(this, R.layout.tool_tip);
+        lineChart = findViewById(R.id.lineChart);
+        lineChart.setBackgroundColor(R.color.primaryExtraLight);
+        lineChart.setDrawGridBackground(false);
+        lineChart.getDescription().setEnabled(true);
+        lineChart.setMarker(chartMarker);
+        lineChart.setBorderColor(Color.BLACK);
+        lineChart.setTouchEnabled(true);
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(true);
+        lineChart.setPinchZoom(true);
+        lineChart.getAxisLeft().setDrawAxisLine(false);
+        lineChart.getAxisLeft().setDrawGridLines(true);
+        lineChart.getAxisLeft().setGridLineWidth(0.5f);
+        lineChart.getAxisLeft().setGridColor(R.color.White);
+        lineChart.getAxisRight().setEnabled(false);
+        lineChart.getAxisLeft().setDrawLabels(true);
+        lineChart.getAxisLeft().setTextColor(Color.WHITE);
+        lineChart.getAxisRight().setDrawLabels(false);
+        lineChart.getXAxis().setDrawLabels(true);
+        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        lineChart.getXAxis().setLabelCount(4, true);
+        lineChart.getXAxis().setDrawGridLines(false);
+        lineChart.getXAxis().setDrawAxisLine(false);
+        lineChart.getXAxis().setTextColor(Color.WHITE);
+
+
+    }
 
 }
