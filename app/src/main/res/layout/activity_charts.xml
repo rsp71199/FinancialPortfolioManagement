@@ -24,7 +24,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include layout="@layout/progress_bar_view"></include>
+        <include layout="@layout/no_connection_view"></include>
         <androidx.cardview.widget.CardView
+            android:visibility="invisible"
             android:backgroundTint="@color/Black"
             android:background="@color/Black"
             android:id="@+id/candleChartCard"
@@ -41,6 +44,7 @@
 
 
         <androidx.cardview.widget.CardView
+            android:visibility="invisible"
             android:backgroundTint="@color/Black"
             android:background="@color/Black"
             android:id="@+id/lineChartCard"

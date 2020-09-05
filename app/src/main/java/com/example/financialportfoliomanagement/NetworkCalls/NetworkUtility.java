@@ -22,13 +22,17 @@ import com.example.financialportfoliomanagement.Adapters.NewsAdapter;
 import com.example.financialportfoliomanagement.Adapters.SearchAdapter;
 import com.example.financialportfoliomanagement.Adapters.TrendingTickersAdapter;
 import com.example.financialportfoliomanagement.Auth.Auth;
+import com.example.financialportfoliomanagement.Interfaces.OnCandleChartsDataRetrieveInterface;
+import com.example.financialportfoliomanagement.Interfaces.OnChartDataRetrieveFailure;
 import com.example.financialportfoliomanagement.Interfaces.OnIndexDataRetrieveInterface;
+import com.example.financialportfoliomanagement.Interfaces.OnLineChartDataRetrieveInterface;
 import com.example.financialportfoliomanagement.Interfaces.OnSearchResultRetrieveInterface;
 import com.example.financialportfoliomanagement.Interfaces.OnStocksDataRetrieveInterface;
 import com.example.financialportfoliomanagement.Models.Index;
 import com.example.financialportfoliomanagement.Models.News;
 import com.example.financialportfoliomanagement.Models.SearchResult;
 import com.example.financialportfoliomanagement.Models.TrendingTicker;
+import com.example.financialportfoliomanagement.Utilities.ApiEndPoints;
 import com.example.financialportfoliomanagement.Utilities.JSONFetcher;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -51,8 +55,23 @@ public class NetworkUtility {
     private OnIndexDataRetrieveInterface onIndexDataRetrieveInterface;
     private OnStocksDataRetrieveInterface onStocksDataRetrieveInterface;
     private OnSearchResultRetrieveInterface onSearchResultRetrieveInterface;
+    private OnCandleChartsDataRetrieveInterface onCandleChartsDataRetrieveInterface;
+    private OnLineChartDataRetrieveInterface onLineChartDataRetrieveInterface;
+    private OnChartDataRetrieveFailure onChartDataRetrieveFailure;
     Object object;
 
+
+    public void setOnCandleChartsDataRetrieveInterface(OnCandleChartsDataRetrieveInterface onCandleChartsDataRetrieveInterface) {
+        this.onCandleChartsDataRetrieveInterface = onCandleChartsDataRetrieveInterface;
+    }
+
+    public void setOnLineChartDataRetrieveInterface(OnLineChartDataRetrieveInterface onLineChartDataRetrieveInterface) {
+        this.onLineChartDataRetrieveInterface = onLineChartDataRetrieveInterface;
+    }
+
+    public void setOnChartDataRetrieveFailure(OnChartDataRetrieveFailure onChartDataRetrieveFailure) {
+        this.onChartDataRetrieveFailure = onChartDataRetrieveFailure;
+    }
 
     public void setOnSearchResultRetrieveInterface(OnSearchResultRetrieveInterface onSearchResultRetrieveInterface) {
         this.onSearchResultRetrieveInterface = onSearchResultRetrieveInterface;
@@ -74,6 +93,60 @@ public class NetworkUtility {
         this.auth = auth;
     }
 
+    public void setChart(String symbol, String function, final String interval, String apiKey, final int chart_id) {
+
+        String arraySearchKey = "";
+        String url = "";
+        if (function == ApiEndPoints.TIME_SERIES_INTRADAY) {
+            arraySearchKey = "Time Series (" + interval + ")";
+            url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol="
+                    + symbol + "&interval=" + interval + "&apikey=" + ApiEndPoints.alphaApi;
+
+
+        } else if (function == ApiEndPoints.TIME_SERIES_DAILY) {
+            arraySearchKey = "Time Series (Daily)";
+            url = "https://www.alphavantage.co/query?function="
+                    + function + "&symbol="
+                    + symbol + "&outputsize=full&apikey="
+                    + apiKey;
+        } else if (function == ApiEndPoints.TIME_SERIES_WEEKLY) {
+            arraySearchKey = "Weekly Time Series";
+            url = "https://www.alphavantage.co/query?function="
+                    + function + "&symbol="
+                    + symbol + "&outputsize=full&apikey="
+                    + apiKey;
+        } else if (function == ApiEndPoints.TIME_SERIES_MONTHLY) {
+            arraySearchKey = "Monthly Time Series";
+            url = "https://www.alphavantage.co/query?function="
+                    + function + "&symbol="
+                    + symbol + "&outputsize=full&apikey="
+                    + apiKey;
+        }
+        final String finalArraySearchKey = arraySearchKey;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String res) {
+
+                        if (chart_id == 0) {
+                            onCandleChartsDataRetrieveInterface.onCandleChartDataRetrieveSuccess(res, finalArraySearchKey);
+                        } else {
+                            onLineChartDataRetrieveInterface.onLineChartDataRetrieveSuccess(res, finalArraySearchKey);
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                onChartDataRetrieveFailure.onFailure();
+            }
+        });
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(stringRequest);
+    }
     public void get_index_summary(){
         String url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-summary";
         StringRequest request = new StringRequest(Request.Method.GET

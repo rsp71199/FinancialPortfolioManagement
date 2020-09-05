@@ -7,6 +7,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -45,9 +48,12 @@ public class SearchActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private List<SearchResult> searchResults = new ArrayList<>();
     private Toolbar toolbar;
+    ImageButton refresh;
     private Auth auth;
     private String from;
+    LinearLayout recycler_view_view,no_connection_view,progress_var_view;
     private NetworkUtility networkUtility;
+    private String text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +78,22 @@ public class SearchActivity extends AppCompatActivity {
     }
     private void setLayout(){
         setContentView(R.layout.activity_search);
+        refresh = findViewById(R.id.refresh_button);
         from = getIntent().getStringExtra("from");
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        no_connection_view = findViewById(R.id.no_connection_view);
+        progress_var_view = findViewById(R.id.progress_bar_view);
+        recycler_view_view = findViewById(R.id.search_recycler_view_view);
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showProgressbarView();
+                networkUtility.get_search_result(text);
+            }
+        });
     }
     private void setNetworkUtility(){
         networkUtility = new NetworkUtility(this,auth);
@@ -89,13 +106,15 @@ public class SearchActivity extends AppCompatActivity {
                 }else{
                     mAdapter.refresh(searchResultList);
                 }
+                showSearchRecyclerView();
             }
 
             @Override
             public void onSearchResultRetrieveFailure() {
-
+                showNoConnectionView();
             }
         });
+        showProgressbarView();
         networkUtility.get_search_result("A");
     }
     private void recyclerViewSetter() {
@@ -108,6 +127,22 @@ public class SearchActivity extends AppCompatActivity {
         dividerItemDecoration.setDrawable(verticalDivider);
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
+
+    public void showSearchRecyclerView(){
+        recycler_view_view.setVisibility(View.VISIBLE);
+        no_connection_view.setVisibility(View.INVISIBLE);
+        progress_var_view.setVisibility(View.INVISIBLE);
+    }
+    public void showNoConnectionView(){
+        recycler_view_view.setVisibility(View.INVISIBLE);
+        no_connection_view.setVisibility(View.VISIBLE);
+        progress_var_view.setVisibility(View.INVISIBLE);
+    }
+    public void showProgressbarView(){
+        recycler_view_view.setVisibility(View.INVISIBLE);
+        no_connection_view.setVisibility(View.INVISIBLE);
+        progress_var_view.setVisibility(View.VISIBLE);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -115,6 +150,7 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setMenuItem(item);
         return true;
     }
+
 
 
 
@@ -129,7 +165,10 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                text = newText;
+                showProgressbarView();
                 networkUtility.get_search_result(newText);
+
                 return false;
             }
         });

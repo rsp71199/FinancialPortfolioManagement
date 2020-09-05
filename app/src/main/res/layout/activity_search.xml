@@ -42,13 +42,20 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:background="@color/primary"
-            android:id="@+id/my_recycler_view"
-            android:scrollbars="vertical"
+        <include layout="@layout/no_connection_view"></include>
+        <include layout="@layout/progress_bar_view"></include>
+        <LinearLayout
+            android:id="@+id/search_recycler_view_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:background="@color/primary"
+                android:id="@+id/my_recycler_view"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
     </FrameLayout>
 
 
