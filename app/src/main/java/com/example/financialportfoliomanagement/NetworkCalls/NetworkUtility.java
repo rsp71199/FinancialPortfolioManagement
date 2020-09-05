@@ -1,0 +1,203 @@
+package com.example.financialportfoliomanagement.NetworkCalls;
+
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Handler;
+import android.util.Log;
+import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.financialportfoliomanagement.Adapters.IndexAdapter;
+import com.example.financialportfoliomanagement.Adapters.NewsAdapter;
+import com.example.financialportfoliomanagement.Adapters.SearchAdapter;
+import com.example.financialportfoliomanagement.Adapters.TrendingTickersAdapter;
+import com.example.financialportfoliomanagement.Auth.Auth;
+import com.example.financialportfoliomanagement.Interfaces.OnIndexDataRetrieveInterface;
+import com.example.financialportfoliomanagement.Interfaces.OnSearchResultRetrieveInterface;
+import com.example.financialportfoliomanagement.Interfaces.OnStocksDataRetrieveInterface;
+import com.example.financialportfoliomanagement.Models.Index;
+import com.example.financialportfoliomanagement.Models.News;
+import com.example.financialportfoliomanagement.Models.SearchResult;
+import com.example.financialportfoliomanagement.Models.TrendingTicker;
+import com.example.financialportfoliomanagement.Utilities.JSONFetcher;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class NetworkUtility {
+    private Context context;
+    private Auth auth;
+    private OnIndexDataRetrieveInterface onIndexDataRetrieveInterface;
+    private OnStocksDataRetrieveInterface onStocksDataRetrieveInterface;
+    private OnSearchResultRetrieveInterface onSearchResultRetrieveInterface;
+    Object object;
+
+
+    public void setOnSearchResultRetrieveInterface(OnSearchResultRetrieveInterface onSearchResultRetrieveInterface) {
+        this.onSearchResultRetrieveInterface = onSearchResultRetrieveInterface;
+    }
+
+    public void setOnIndexDataRetrieveInterface(OnIndexDataRetrieveInterface onIndexDataRetrieveInterface) {
+        this.onIndexDataRetrieveInterface = onIndexDataRetrieveInterface;
+    }
+
+    public void setOnStocksDataRetrieveInterface(OnStocksDataRetrieveInterface onStocksDataRetrieveInterface) {
+        this.onStocksDataRetrieveInterface = onStocksDataRetrieveInterface;
+    }
+    public NetworkUtility(Context context) {
+        this.context = context;
+    }
+
+    public NetworkUtility(Context context, Auth auth) {
+        this.context = context;
+        this.auth = auth;
+    }
+
+    public void get_index_summary(){
+        String url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-summary";
+        StringRequest request = new StringRequest(Request.Method.GET
+                , url
+                , new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (!response.equals(null)) {
+                    Log.e("Summary_Network",response);
+                    process_index_summary_data(response);
+                }
+                else {
+                    Log.e("Your Array Response", "Data Null");
+                    onIndexDataRetrieveInterface.onIndexDataRetrieveFailure();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("error is ", "" + error);
+                onIndexDataRetrieveInterface.onIndexDataRetrieveFailure();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("x-rapidapi-host", "apidojo-yahoo-finance-v1.p.rapidapi.com");
+                params.put("x-rapidapi-key", "c3053afbcemsh74ad59fc4e199f2p102296jsn1773dd7a07fd");
+                return params;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+    }
+    public void process_index_summary_data(String response_real) {
+
+        final List<Index> indexList = new ArrayList<>();
+        try {
+            JSONObject res = new JSONObject(JSONFetcher.fetch(context, "dummy_summary.json"));//getData from network
+            JSONObject marketSummaryResponse = res.getJSONObject("marketSummaryResponse");
+            final JSONArray result = marketSummaryResponse.getJSONArray("result");
+            new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        for (int i = 0; i < result.length(); i++) {
+                            JSONObject element = result.getJSONObject(i);
+                            String fullExchangeName = element.getString("fullExchangeName");
+                            String regularMarketChangePercent = element.getJSONObject("regularMarketChangePercent").getString("fmt");
+                            String regularMarketChangePercentRaw = element.getJSONObject("regularMarketChangePercent").getString("raw");
+                            String regularMarketPrice = element.getJSONObject("regularMarketPrice").getString("raw");
+                            String regularMarketChange = element.getJSONObject("regularMarketChange").getString("fmt");
+                            String regularMarketPreviousClose = element.getJSONObject("regularMarketPreviousClose").getString("raw");
+                            boolean b = false;
+                            float percent = Float.parseFloat(regularMarketChangePercentRaw);
+                            if (percent <= 0) b = true;
+                            indexList.add(new Index(fullExchangeName
+                                    , regularMarketPrice
+                                    , regularMarketChange + " (" + regularMarketChangePercent + ")"
+                                    , regularMarketPreviousClose, b));
+
+                            Log.i("TAG", fullExchangeName);
+                        }
+                        onIndexDataRetrieveInterface.onIndexDataRetrieveSuccess(indexList);
+                    } catch (Exception e) {
+                        onIndexDataRetrieveInterface.onIndexDataRetrieveFailure();
+                    }
+                }
+            }.run();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            onIndexDataRetrieveInterface.onIndexDataRetrieveFailure();
+        }
+    }
+    public void get_search_result(String symbol) {
+        final List<SearchResult> searchResults = new ArrayList<>();
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + symbol + "&apikey=B02L3PBPXDL1PUY4";
+        final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.\
+
+                        try {
+                            final JSONObject json = new JSONObject(response);
+                            final JSONArray jsonArray = json.getJSONArray("bestMatches");
+//                            Log.i("TAG", response);
+                            final Handler handler = new Handler();
+                            final List<String> user_watch_list = auth==null?null:auth.user.getWatch_list_symbols();
+                            final Runnable r = new Runnable() {
+                                public void run() {
+                                    searchResults.clear();
+                                    try {
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject jsonElement = jsonArray.getJSONObject(i);
+                                            String sym = jsonElement.get("1. symbol").toString();
+                                            String equityName = jsonElement.get("2. name").toString();
+                                            boolean b = user_watch_list != null && user_watch_list.contains(sym);
+
+                                            searchResults.add(new SearchResult(equityName, sym, b));
+//                                            Log.i("TAG", equityName);
+                                        }
+                                        onSearchResultRetrieveInterface.onSearchResultRetrieveSuccess(searchResults);
+                                    } catch (Exception e) {
+                                        onSearchResultRetrieveInterface.onSearchResultRetrieveFailure();
+                                    }
+                                }
+                            };
+                            r.run();
+                        } catch (JSONException e) {
+                            onSearchResultRetrieveInterface.onSearchResultRetrieveFailure();
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                , new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("TAG", error.toString());
+                        onSearchResultRetrieveInterface.onSearchResultRetrieveFailure();
+                    }
+                });
+        queue.add(stringRequest);
+    }
+}

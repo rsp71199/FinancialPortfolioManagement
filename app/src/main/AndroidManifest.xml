@@ -9,17 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.WatchListActivity"></activity>
-        <activity android:name=".Activities.DashBoardActivity2">
+        <activity android:name=".Activities.Commentary"></activity>
+        <activity android:name=".Activities.WatchListActivity" />
+        <activity android:name=".Activities.DashBoardActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Activities.DashboardActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.ChartsActivity"
             android:screenOrientation="portrait" />
@@ -36,5 +34,7 @@
             android:name=".Activities.RegistrationActivity"
             android:screenOrientation="portrait" />
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

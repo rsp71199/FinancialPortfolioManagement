@@ -12,7 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.financialportfoliomanagement.Auth.Auth;
-import com.example.financialportfoliomanagement.Listners.WatchListDataListner;
+import com.example.financialportfoliomanagement.Interfaces.WatchListDataRetrieveInterface;
 import com.example.financialportfoliomanagement.Models.WatchListItem;
 
 import org.json.JSONException;
@@ -27,7 +27,7 @@ public class WatchListAsyncTask extends AsyncTask<Integer, String, String> {
     RequestQueue queue;
     List<String> watch_list_symbols;
     ProgressDialog progressDialog;
-    WatchListDataListner watchListDataListner;
+    WatchListDataRetrieveInterface watchListDataRetrieveInterface;
 
     public WatchListAsyncTask(Context context, List<String> watch_list_symbols, ProgressDialog progressDialog) {
         this.context = context;
@@ -36,8 +36,8 @@ public class WatchListAsyncTask extends AsyncTask<Integer, String, String> {
         queue = Volley.newRequestQueue(context);
     }
 
-    public void setWatchListDataListner(WatchListDataListner watchListDataListner) {
-        this.watchListDataListner = watchListDataListner;
+    public void setWatchListDataRetrieveInterface(WatchListDataRetrieveInterface watchListDataRetrieveInterface) {
+        this.watchListDataRetrieveInterface = watchListDataRetrieveInterface;
     }
 
 
@@ -68,14 +68,14 @@ public class WatchListAsyncTask extends AsyncTask<Integer, String, String> {
                                 Log.i("TAG", symbol + " " + open);
                                 responses.add(new WatchListItem(symbol, "", low, high, open, price, change, prev_close));
                                 if (i[0] == length) {
-                                    watchListDataListner.onDataFetched(responses);
+                                    watchListDataRetrieveInterface.onDataFetched(responses);
                                 }
                             } catch (JSONException e) {
 //                                e.printStackTrace();
                                 responses.add(new WatchListItem(symbol, "", "--", "--"
                                         , "--", "--", "--", "--"));
                                 if (i[0] == length) {
-                                    watchListDataListner.onDataFetched(responses);
+                                    watchListDataRetrieveInterface.onDataFetched(responses);
                                 }
                             }
 

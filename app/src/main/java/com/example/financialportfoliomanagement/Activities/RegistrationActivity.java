@@ -106,7 +106,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         mPrgressDialog.dismiss();
 //        btnRegistration.setText("Email verified ?");
         Toast.makeText(getApplicationContext(), "Successfully Registered", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(RegistrationActivity.this, DashBoardActivity2.class);
+        Intent intent = new Intent(RegistrationActivity.this, DashBoardActivity.class);
         startActivity(intent);
         finish();
     }

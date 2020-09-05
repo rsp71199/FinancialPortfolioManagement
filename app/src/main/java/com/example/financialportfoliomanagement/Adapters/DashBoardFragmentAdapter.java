@@ -7,10 +7,10 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.example.financialportfoliomanagement.Fragments.IndexFragment;
 import com.example.financialportfoliomanagement.Fragments.StockFragment;
 
-public class DahsBoardFragmentAdapter extends FragmentStatePagerAdapter {
+public class DashBoardFragmentAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
 
-    public DahsBoardFragmentAdapter(FragmentManager fm, int mNumOfTabs) {
+    public DashBoardFragmentAdapter(FragmentManager fm, int mNumOfTabs) {
         super(fm);
         this.mNumOfTabs = mNumOfTabs;
     }

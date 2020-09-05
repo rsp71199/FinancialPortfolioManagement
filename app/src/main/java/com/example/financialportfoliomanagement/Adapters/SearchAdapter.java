@@ -24,6 +24,17 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
     private List<SearchResult> mDataset;
     private Context context;
     private Auth auth;
+<<<<<<< HEAD
+=======
+
+    public void refresh(List<SearchResult> searchResultList){
+        mDataset = searchResultList;
+        notifyDataSetChanged();
+    }
+    // Provide a reference to the views for each data item
+    // Complex data items may need more than one view per item, and
+    // you provide access to all the views for a data item in a view holder
+>>>>>>> rutuja
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView searchName;
         public TextView searchSymbol;
@@ -64,15 +75,25 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context, ChartsActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("SYMBOL", mDataset.get(position).symbol);
                 context.startActivity(i);
             }
         });
+<<<<<<< HEAD
         holder.add_to_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mDataset.get(position).added_to_list == false) {
                     if(auth.user.add_watch_list_item(mDataset.get(position).symbol)){
+=======
+        if(auth!=null){
+            holder.add_to_list.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mDataset.get(position).added_to_list == false) {
+                        auth.user.add_watch_list_item(mDataset.get(position).symbol);
+>>>>>>> rutuja
                         auth.setUser(new AuthOnCompleteUpdateInterface() {
                             @Override
                             public void onFireBaseUserUpdateSuccess() {
@@ -86,17 +107,24 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
                                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG);
                             }
                         }, auth.user);
+<<<<<<< HEAD
                     }else{
                         Toast.makeText(context, "Limit reached", Toast.LENGTH_SHORT).show();
                     }
 
+=======
+                    }
+>>>>>>> rutuja
                 }
+            });
+            if (mDataset.get(position).added_to_list) {
+                holder.add_to_list.setImageResource(R.drawable.options_added);
+            }else{
+                holder.add_to_list.setImageResource(R.drawable.options);
             }
-        });
-        if (mDataset.get(position).added_to_list) {
-            holder.add_to_list.setImageResource(R.drawable.options_added);
-
         }
+
+
         holder.searchName.setText(mDataset.get(position).name);
         holder.searchSymbol.setText(mDataset.get(position).symbol);
 
