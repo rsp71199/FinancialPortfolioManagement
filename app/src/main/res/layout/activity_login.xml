@@ -24,6 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
+            app:hintTextColor="@color/tertiary"
+            app:boxStrokeColor="@color/tertiary"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -40,6 +42,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:hint="Password"
+            app:hintTextColor="@color/tertiary"
+            app:boxStrokeColor="@color/tertiary"
 
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -72,7 +76,7 @@
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
                 android:layout_width="match_parent"
-                app:backgroundTint="@color/Black"
+                app:backgroundTint="@color/tertiary"
                 android:textColor="@color/White"
                 android:layout_height="60dp"
 
@@ -86,6 +90,7 @@
                 android:layout_weight="1"
                 android:id="@+id/button_register"
                 android:textSize="15sp"
+                android:textColor="@color/tertiary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Register?"

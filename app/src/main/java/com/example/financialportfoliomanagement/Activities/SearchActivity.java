@@ -1,10 +1,7 @@
 package com.example.financialportfoliomanagement.Activities;
 
-import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,12 +15,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.financialportfoliomanagement.Adapters.SearchAdapter;
 import com.example.financialportfoliomanagement.Auth.Auth;
 import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteRetreiveInterface;
@@ -32,10 +23,6 @@ import com.example.financialportfoliomanagement.Models.SearchResult;
 import com.example.financialportfoliomanagement.NetworkCalls.NetworkUtility;
 import com.example.financialportfoliomanagement.R;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +38,7 @@ public class SearchActivity extends AppCompatActivity {
     ImageButton refresh;
     private Auth auth;
     private String from;
-    LinearLayout recycler_view_view,no_connection_view,progress_var_view;
+    LinearLayout recycler_view_view, no_connection_view, progress_bar_view;
     private NetworkUtility networkUtility;
     private String text;
 
@@ -61,7 +48,7 @@ public class SearchActivity extends AppCompatActivity {
         setAuth();
     }
 
-    private void setAuth(){
+    private void setAuth() {
         auth = new Auth();
         auth.getUser(new AuthOnCompleteRetreiveInterface() {
             @Override
@@ -83,7 +70,7 @@ public class SearchActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         no_connection_view = findViewById(R.id.no_connection_view);
-        progress_var_view = findViewById(R.id.progress_bar_view);
+        progress_bar_view = findViewById(R.id.progress_bar_view);
         recycler_view_view = findViewById(R.id.search_recycler_view_view);
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -131,17 +118,17 @@ public class SearchActivity extends AppCompatActivity {
     public void showSearchRecyclerView(){
         recycler_view_view.setVisibility(View.VISIBLE);
         no_connection_view.setVisibility(View.INVISIBLE);
-        progress_var_view.setVisibility(View.INVISIBLE);
+        progress_bar_view.setVisibility(View.INVISIBLE);
     }
     public void showNoConnectionView(){
         recycler_view_view.setVisibility(View.INVISIBLE);
         no_connection_view.setVisibility(View.VISIBLE);
-        progress_var_view.setVisibility(View.INVISIBLE);
+        progress_bar_view.setVisibility(View.INVISIBLE);
     }
     public void showProgressbarView(){
         recycler_view_view.setVisibility(View.INVISIBLE);
         no_connection_view.setVisibility(View.INVISIBLE);
-        progress_var_view.setVisibility(View.VISIBLE);
+        progress_bar_view.setVisibility(View.VISIBLE);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

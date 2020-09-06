@@ -2,13 +2,6 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/search"
-        android:icon="@drawable/search"
-        android:title="Search"
-        android:contentDescription="content_description_search"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/refresh"
         android:title="Refresh"
         android:icon="@drawable/refresh"
@@ -59,9 +52,6 @@
             <item
                 android:id="@+id/lineChart"
                 android:title="Line Chart"></item>
-            <item
-                android:id="@+id/barChart"
-                android:title="Bar Chart"></item>
         </menu>
 
     </item>

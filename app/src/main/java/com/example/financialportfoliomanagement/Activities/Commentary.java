@@ -1,50 +1,60 @@
 package com.example.financialportfoliomanagement.Activities;
 
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.Toast;
-
 import com.example.financialportfoliomanagement.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Commentary extends AppCompatActivity {
 
     private Toolbar toolbar;
+    private AutoCompleteTextView time_period_selector;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_commentary);
-        setBottomNavigation();
-    }
-    private void setBottomNavigation(){
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.home_tab:
-                        Toast.makeText(Commentary.this, "Home", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(Commentary.this, DashBoardActivity.class);
-                        startActivity(i);
-                        break;
-                    case R.id.commentary:
-                        Toast.makeText(Commentary.this, "Commentary", Toast.LENGTH_SHORT).show();
-                        Intent j = new Intent(Commentary.this, Commentary.class);
-                        startActivity(j);
-                        break;
-                    case R.id.report:
-                        Toast.makeText(Commentary.this, "Reports", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-                return true;
-            }
-        });
+        time_period_selector = findViewById(R.id.prediction_period);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        String[] COUNTRIES = new String[]{"1 day", "1 week", "1 month", "1 year"};
+
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(
+                        this,
+                        R.layout.time_period_menu,
+                        COUNTRIES);
+
+
+        time_period_selector.setAdapter(adapter);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.commentry_menu, menu);
+//        MenuItem item = menu.findItem(R.id.action_search);
+
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home: {
+                super.onBackPressed();
+                finish();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

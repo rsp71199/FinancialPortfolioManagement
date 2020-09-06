@@ -86,7 +86,10 @@ public class DashBoardActivity extends AppCompatActivity {
 
                         break;
                     }
-
+                    case R.id.commentary: {
+                        startActivity(new Intent(DashBoardActivity.this, Commentary.class));
+                        break;
+                    }
                     case R.id.settings:
                         Toast.makeText(DashBoardActivity.this, "Settings", Toast.LENGTH_SHORT).show();
                         break;
@@ -98,9 +101,6 @@ public class DashBoardActivity extends AppCompatActivity {
 
                     case R.id.contact:
                         Toast.makeText(DashBoardActivity.this, "Contact Us", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.help:
-                        Toast.makeText(DashBoardActivity.this, "Help", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.signOut: {
                         if (user != null) {
@@ -152,12 +152,14 @@ public class DashBoardActivity extends AppCompatActivity {
         MenuItem loginItem = sideNavigationMenu.findItem(R.id.login);
         MenuItem watchListItem = sideNavigationMenu.findItem(R.id.watchlist);
         MenuItem signOut = sideNavigationMenu.findItem(R.id.signOut);
+        MenuItem commentary = sideNavigationMenu.findItem(R.id.commentary);
 
         if (isLoggedIn) {
             watchListItem.setVisible(true);
             loginItem.setIcon(R.drawable.avatar);
             loginItem.setTitle("Profile");
             signOut.setVisible(true);
+            commentary.setVisible(true);
             navigationView.getHeaderView(0).findViewById(R.id.header_signIn).setVisibility(View.VISIBLE);
             navigationView.getHeaderView(0).findViewById(R.id.header_singOut).setVisibility(View.INVISIBLE);
         }
@@ -166,6 +168,7 @@ public class DashBoardActivity extends AppCompatActivity {
             loginItem.setIcon(R.drawable.login);
             loginItem.setTitle("Sign in");
             signOut.setVisible(false);
+            commentary.setVisible(false);
             navigationView.getHeaderView(0).findViewById(R.id.header_signIn).setVisibility(View.INVISIBLE);
             navigationView.getHeaderView(0).findViewById(R.id.header_singOut).setVisibility(View.VISIBLE);
         }

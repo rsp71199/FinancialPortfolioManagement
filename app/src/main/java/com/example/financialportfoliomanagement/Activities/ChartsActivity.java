@@ -1,7 +1,5 @@
 package com.example.financialportfoliomanagement.Activities;
 
-import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -21,7 +19,6 @@ import androidx.core.content.ContextCompat;
 import com.example.financialportfoliomanagement.Interfaces.OnCandleChartsDataRetrieveInterface;
 import com.example.financialportfoliomanagement.Interfaces.OnChartDataRetrieveFailure;
 import com.example.financialportfoliomanagement.Interfaces.OnLineChartDataRetrieveInterface;
-import com.example.financialportfoliomanagement.NetworkCalls.ChartsNetworkUtility;
 import com.example.financialportfoliomanagement.NetworkCalls.NetworkUtility;
 import com.example.financialportfoliomanagement.R;
 import com.example.financialportfoliomanagement.Utilities.ApiEndPoints;
@@ -74,6 +71,8 @@ public class ChartsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         SYMBOL = "IBM";
         SYMBOL = intent.getStringExtra("SYMBOL");
         no_connection_view = findViewById(R.id.no_connection_view);
@@ -123,7 +122,7 @@ public class ChartsActivity extends AppCompatActivity {
         lineCard = findViewById(R.id.lineChartCard);
         ChartMarker chartMarker = new ChartMarker(this, R.layout.tool_tip);
         lineChart = findViewById(R.id.lineChart);
-        lineChart.setBackgroundColor(getColor(R.color.primary));
+        lineChart.setBackgroundColor(getColor(R.color.Black));
         lineChart.setDrawGridBackground(false);
         lineChart.getDescription().setEnabled(true);
         lineChart.setMarker(chartMarker);
@@ -383,7 +382,7 @@ public class ChartsActivity extends AppCompatActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.charts_bottom_appbar, menu);
+        getMenuInflater().inflate(R.menu.charts_appbar, menu);
         return true;
     }
 
@@ -391,18 +390,16 @@ public class ChartsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.search: {
-                Intent i = new Intent(this, SearchActivity.class);
-                startActivity(i);
-                break;
-
+            case android.R.id.home: {
+                super.onBackPressed();
+                finish();
             }
             case R.id.refresh: {
                 showProgressBar();
-                    if (INTERVAL == "5min" || INTERVAL == "30min" || INTERVAL == "60min") {
-                        networkUtility.setChart(SYMBOL
-                                , FUNCTION, INTERVAL, ApiEndPoints.alphaApi, current_chart_id);
-                    }
+                if (INTERVAL == "5min" || INTERVAL == "30min" || INTERVAL == "60min") {
+                    networkUtility.setChart(SYMBOL
+                            , FUNCTION, INTERVAL, ApiEndPoints.alphaApi, current_chart_id);
+                }
                 break;
             }
             case R.id.interval1: {
@@ -467,10 +464,6 @@ public class ChartsActivity extends AppCompatActivity {
                 lineCard.setVisibility(View.VISIBLE);
                 candleCard.setVisibility(View.INVISIBLE);
             }
-            case R.id.barChart: {
-                break;
-            }
-
 
         }
         return super.onOptionsItemSelected(item);

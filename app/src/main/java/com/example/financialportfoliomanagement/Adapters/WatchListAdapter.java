@@ -1,7 +1,7 @@
 package com.example.financialportfoliomanagement.Adapters;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +10,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.financialportfoliomanagement.Activities.ChartsActivity;
 import com.example.financialportfoliomanagement.Auth.Auth;
-import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteRetreiveInterface;
 import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteUpdateInterface;
-import com.example.financialportfoliomanagement.Interfaces.WatchListDataRetrieveInterface;
 import com.example.financialportfoliomanagement.Models.WatchListItem;
 import com.example.financialportfoliomanagement.NetworkCalls.WatchListAsyncTask;
 import com.example.financialportfoliomanagement.R;
@@ -24,32 +24,11 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.MyVi
     public List<WatchListItem> mDataset;
     public Context context;
     public Auth auth;
-    public ProgressDialog progressDialog;
     public WatchListAsyncTask watchListAsyncTask;
 
-    public void refresh() {
-        progressDialog.setTitle("loading...");
-        progressDialog.show();
-        auth.getUser(new AuthOnCompleteRetreiveInterface() {
-            @Override
-            public void onFireBaseUserRetrieveSuccess() {
-                watchListAsyncTask = new WatchListAsyncTask(context, auth.user.getWatch_list_symbols(), progressDialog);
-                watchListAsyncTask.setWatchListDataRetrieveInterface(new WatchListDataRetrieveInterface() {
-                    @Override
-                    public void onDataFetched(List<WatchListItem> listItems) {
-                        mDataset = listItems;
-                        progressDialog.cancel();
-                        notifyDataSetChanged();
-                    }
-                });
-                watchListAsyncTask.execute(1);
-            }
-
-            @Override
-            public void onFireBaseUserRetrieveFailure() {
-
-            }
-        });
+    public void refresh(List<WatchListItem> dataset) {
+        mDataset = dataset;
+        notifyDataSetChanged();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -67,8 +46,7 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.MyVi
         }
     }
 
-    public WatchListAdapter(List<WatchListItem> myDataset, Context cont, Auth auth, ProgressDialog progressDialog) {
-        this.progressDialog = progressDialog;
+    public WatchListAdapter(List<WatchListItem> myDataset, Context cont, Auth auth) {
         this.auth = auth;
         this.mDataset = myDataset;
         this.context = cont;
@@ -86,6 +64,11 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.MyVi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent i = new Intent(context, ChartsActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Log.i("GOING CHART ACTIVITY", ">>>>>>>>>> chart set");
+                i.putExtra("SYMBOL", mDataset.get(position).symbol);
+                context.startActivity(i);
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {

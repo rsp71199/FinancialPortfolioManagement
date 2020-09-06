@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:backgroundTint="@color/DarkGray"
     android:orientation="vertical"
     android:layout_height="match_parent">
@@ -12,6 +13,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <androidx.appcompat.widget.Toolbar
+            app:navigationIcon="@drawable/back"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,6 +28,7 @@
 
         <include layout="@layout/progress_bar_view"></include>
         <include layout="@layout/no_connection_view"></include>
+
         <androidx.cardview.widget.CardView
             android:visibility="invisible"
             android:backgroundTint="@color/Black"
@@ -33,7 +36,7 @@
             android:id="@+id/candleChartCard"
             android:layout_width="match_parent"
             android:elevation="10dp"
-            android:layout_height="400dp">
+            android:layout_height="match_parent">
 
             <com.github.mikephil.charting.charts.CandleStickChart
                 android:layout_margin="10dp"

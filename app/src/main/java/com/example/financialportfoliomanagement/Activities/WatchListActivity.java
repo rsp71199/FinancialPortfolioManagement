@@ -1,12 +1,13 @@
 package com.example.financialportfoliomanagement.Activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,48 +29,51 @@ import java.util.List;
 
 public class WatchListActivity extends AppCompatActivity {
 
+    private LinearLayout no_connection_view, progress_bar_view;
+    private RelativeLayout recycler_view_view;
     private RecyclerView recyclerView;
     private WatchListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private Toolbar toolbar;
-    private ProgressDialog progressDialog;
     private WatchListAsyncTask watchListAsyncTask;
     private com.google.android.material.floatingactionbutton.FloatingActionButton floatingActionButton;
     Auth auth;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watch_list);
         toolbar = findViewById(R.id.toolbar);
         floatingActionButton = findViewById(R.id.floating_add_button);
-        setSupportActionBar(toolbar);
-        auth = new Auth();
-        progressDialog = new ProgressDialog(this);
+        recycler_view_view = findViewById(R.id.recycler_view_view);
+        no_connection_view = findViewById(R.id.no_connection_view);
+        progress_bar_view = findViewById(R.id.progress_bar_view);
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        auth = new Auth();
+        showProgressbarView();
         auth.getUser(new AuthOnCompleteRetreiveInterface() {
             @Override
             public void onFireBaseUserRetrieveSuccess() {
 
                 recyclerViewSetter();
-                watchListAsyncTask = new WatchListAsyncTask(getApplication(), auth.user.getWatch_list_symbols(), progressDialog);
+                watchListAsyncTask = new WatchListAsyncTask(getApplication(), auth.user.getWatch_list_symbols());
                 watchListAsyncTask.setWatchListDataRetrieveInterface(new WatchListDataRetrieveInterface() {
                     @Override
                     public void onDataFetched(List<WatchListItem> listItems) {
-                        mAdapter = new WatchListAdapter(listItems, getApplication(), auth, progressDialog);
+                        mAdapter = new WatchListAdapter(listItems, getApplication(), auth);
                         recyclerView.setAdapter(mAdapter);
-                        progressDialog.cancel();
+                        showWatchListRecyclerView();
                     }
                 });
                 watchListAsyncTask.execute(1);
-                progressDialog.setTitle("loading...");
-                progressDialog.show();
 
             }
 
             @Override
             public void onFireBaseUserRetrieveFailure() {
-
+                showNoConnectionView();
             }
         });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +103,10 @@ public class WatchListActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
+            case android.R.id.home: {
+                super.onBackPressed();
+                finish();
+            }
             case R.id.analyze: {
                 Toast.makeText(this, "Analyzing", Toast.LENGTH_SHORT).show();
 //                Intent i = new Intent(this, SearchActivity.class);
@@ -106,7 +114,26 @@ public class WatchListActivity extends AppCompatActivity {
                 break;
             }
             case R.id.refresh: {
-                mAdapter.refresh();
+                showProgressbarView();
+                auth.getUser(new AuthOnCompleteRetreiveInterface() {
+                    @Override
+                    public void onFireBaseUserRetrieveSuccess() {
+                        watchListAsyncTask = new WatchListAsyncTask(getApplication(), auth.user.getWatch_list_symbols());
+                        watchListAsyncTask.setWatchListDataRetrieveInterface(new WatchListDataRetrieveInterface() {
+                            @Override
+                            public void onDataFetched(List<WatchListItem> listItems) {
+                                mAdapter.refresh(listItems);
+                                showWatchListRecyclerView();
+                            }
+                        });
+                        watchListAsyncTask.execute(1);
+                    }
+
+                    @Override
+                    public void onFireBaseUserRetrieveFailure() {
+                        showNoConnectionView();
+                    }
+                });
                 break;
             }
 
@@ -117,10 +144,22 @@ public class WatchListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        if (mAdapter != null) mAdapter.refresh();
+    public void showWatchListRecyclerView() {
+        recycler_view_view.setVisibility(View.VISIBLE);
+        no_connection_view.setVisibility(View.INVISIBLE);
+        progress_bar_view.setVisibility(View.INVISIBLE);
+    }
+
+    public void showNoConnectionView() {
+        recycler_view_view.setVisibility(View.INVISIBLE);
+        no_connection_view.setVisibility(View.VISIBLE);
+        progress_bar_view.setVisibility(View.INVISIBLE);
+    }
+
+    public void showProgressbarView() {
+        recycler_view_view.setVisibility(View.INVISIBLE);
+        no_connection_view.setVisibility(View.INVISIBLE);
+        progress_bar_view.setVisibility(View.VISIBLE);
     }
 
     private void recyclerViewSetter() {

@@ -1,6 +1,5 @@
 package com.example.financialportfoliomanagement.NetworkCalls;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -26,13 +25,11 @@ public class WatchListAsyncTask extends AsyncTask<Integer, String, String> {
     Context context;
     RequestQueue queue;
     List<String> watch_list_symbols;
-    ProgressDialog progressDialog;
     WatchListDataRetrieveInterface watchListDataRetrieveInterface;
 
-    public WatchListAsyncTask(Context context, List<String> watch_list_symbols, ProgressDialog progressDialog) {
+    public WatchListAsyncTask(Context context, List<String> watch_list_symbols) {
         this.context = context;
         this.watch_list_symbols = watch_list_symbols;
-        this.progressDialog = progressDialog;
         queue = Volley.newRequestQueue(context);
     }
 
