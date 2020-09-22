@@ -3,12 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.StockFragment">
+    tools:context=".Fragments.IndexFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <include layout="@layout/no_connection_view"></include>
+
+    <include layout="@layout/progress_bar_view"></include>
+
+    <LinearLayout
+        android:visibility="invisible"
+        android:background="@color/primary"
+        android:id="@+id/news_recycler_view_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="hello_stock_fragment" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/news_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
 
 </FrameLayout>

@@ -1,14 +1,9 @@
 package com.example.financialportfoliomanagement.NetworkCalls;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.TextView;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -17,28 +12,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.financialportfoliomanagement.Adapters.IndexAdapter;
-import com.example.financialportfoliomanagement.Adapters.NewsAdapter;
-import com.example.financialportfoliomanagement.Adapters.SearchAdapter;
-import com.example.financialportfoliomanagement.Adapters.TrendingTickersAdapter;
 import com.example.financialportfoliomanagement.Auth.Auth;
 import com.example.financialportfoliomanagement.Interfaces.OnCandleChartsDataRetrieveInterface;
 import com.example.financialportfoliomanagement.Interfaces.OnChartDataRetrieveFailure;
 import com.example.financialportfoliomanagement.Interfaces.OnIndexDataRetrieveInterface;
 import com.example.financialportfoliomanagement.Interfaces.OnLineChartDataRetrieveInterface;
+import com.example.financialportfoliomanagement.Interfaces.OnNewsRetrieveInterface;
 import com.example.financialportfoliomanagement.Interfaces.OnSearchResultRetrieveInterface;
 import com.example.financialportfoliomanagement.Interfaces.OnStocksDataRetrieveInterface;
 import com.example.financialportfoliomanagement.Models.Index;
 import com.example.financialportfoliomanagement.Models.News;
 import com.example.financialportfoliomanagement.Models.SearchResult;
-import com.example.financialportfoliomanagement.Models.TrendingTicker;
 import com.example.financialportfoliomanagement.Utilities.ApiEndPoints;
 import com.example.financialportfoliomanagement.Utilities.JSONFetcher;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +44,12 @@ public class NetworkUtility {
     private OnCandleChartsDataRetrieveInterface onCandleChartsDataRetrieveInterface;
     private OnLineChartDataRetrieveInterface onLineChartDataRetrieveInterface;
     private OnChartDataRetrieveFailure onChartDataRetrieveFailure;
+
+    public void setOnNewsRetrieveInterface(OnNewsRetrieveInterface onNewsRetrieveInterface) {
+        this.onNewsRetrieveInterface = onNewsRetrieveInterface;
+    }
+
+    private OnNewsRetrieveInterface onNewsRetrieveInterface;
     Object object;
 
 
@@ -265,12 +257,50 @@ public class NetworkUtility {
                     }
                 }
                 , new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i("TAG", error.toString());
-                        onSearchResultRetrieveInterface.onSearchResultRetrieveFailure();
-                    }
-                });
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("TAG", error.toString());
+                onSearchResultRetrieveInterface.onSearchResultRetrieveFailure();
+            }
+        });
         queue.add(stringRequest);
+    }
+
+    public void get_news() {
+        String url = "https://newsapi.org/v2/everything?q=stocks&apiKey=4428399959044fbdbbf9e78d3c3913c1";
+        StringRequest request = new StringRequest(Request.Method.GET
+                , url
+                , new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray articles = new JSONObject(response).getJSONArray("articles");
+                    List<News> newsList = new ArrayList<>();
+                    for (int i = 0; i < articles.length() && i < 30; i++) {
+                        newsList.add(new News(articles.getJSONObject(i).getString("title")
+                                , articles.getJSONObject(i).getString("description")
+                                , articles.getJSONObject(i).getString("urlToImage")));
+                    }
+                    onNewsRetrieveInterface.success(newsList);
+                } catch (Exception e) {
+                    onNewsRetrieveInterface.failure(e);
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("error is ", "" + error);
+                onNewsRetrieveInterface.failure(error);
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
     }
 }

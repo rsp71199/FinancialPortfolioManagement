@@ -25,6 +25,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         this.context = context;
     }
 
+    public void refresh(List<News> newsList) {
+        mDataset = newsList;
+        notifyDataSetChanged();
+    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case

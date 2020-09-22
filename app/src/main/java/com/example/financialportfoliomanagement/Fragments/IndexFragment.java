@@ -1,6 +1,5 @@
 package com.example.financialportfoliomanagement.Fragments;
 
-import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,7 +35,7 @@ public class IndexFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        networkUtility = new NetworkUtility(getContext());
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +44,7 @@ public class IndexFragment extends Fragment {
         index_recycler_view_view = view.findViewById(R.id.index_recycler_view_view);
         progress_bar_view = view.findViewById(R.id.progress_bar_view);
         indexRecyclerView = view.findViewById(R.id.index_recycler_view);
+//        networkUtility = new NetworkUtility(getContext());
         setIndexRecyclerView();
         showProgressBar();
         setNetworkUtility();
