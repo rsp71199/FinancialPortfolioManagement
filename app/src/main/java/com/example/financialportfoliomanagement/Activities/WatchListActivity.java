@@ -3,6 +3,7 @@ package com.example.financialportfoliomanagement.Activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,17 +14,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.financialportfoliomanagement.Adapters.WatchListAdapter;
-import com.example.financialportfoliomanagement.Auth.Auth;
-import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteRetreiveInterface;
-import com.example.financialportfoliomanagement.Interfaces.WatchListDataRetrieveInterface;
+import com.example.financialportfoliomanagement.Models.User;
 import com.example.financialportfoliomanagement.Models.WatchListItem;
-import com.example.financialportfoliomanagement.NetworkCalls.WatchListAsyncTask;
 import com.example.financialportfoliomanagement.R;
+import com.example.financialportfoliomanagement.ViewModel.AuthViewModel;
 
 import java.util.List;
 
@@ -35,9 +37,12 @@ public class WatchListActivity extends AppCompatActivity {
     private WatchListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private Toolbar toolbar;
-    private WatchListAsyncTask watchListAsyncTask;
+    private List<WatchListItem> watchListItems;
+
     private com.google.android.material.floatingactionbutton.FloatingActionButton floatingActionButton;
-    Auth auth;
+    //    Auth auth;
+    private AuthViewModel authViewModel;
+    private User user_main;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -51,31 +56,10 @@ public class WatchListActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        auth = new Auth();
+//        auth = new Auth();
+        setAuthViewModel();
         showProgressbarView();
-        auth.getUser(new AuthOnCompleteRetreiveInterface() {
-            @Override
-            public void onFireBaseUserRetrieveSuccess() {
 
-                recyclerViewSetter();
-                watchListAsyncTask = new WatchListAsyncTask(getApplication(), auth.user.getWatch_list_symbols());
-                watchListAsyncTask.setWatchListDataRetrieveInterface(new WatchListDataRetrieveInterface() {
-                    @Override
-                    public void onDataFetched(List<WatchListItem> listItems) {
-                        mAdapter = new WatchListAdapter(listItems, getApplication(), auth);
-                        recyclerView.setAdapter(mAdapter);
-                        showWatchListRecyclerView();
-                    }
-                });
-                watchListAsyncTask.execute(1);
-
-            }
-
-            @Override
-            public void onFireBaseUserRetrieveFailure() {
-                showNoConnectionView();
-            }
-        });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,35 +91,8 @@ public class WatchListActivity extends AppCompatActivity {
                 super.onBackPressed();
                 finish();
             }
-            case R.id.analyze: {
-                Toast.makeText(this, "Analyzing", Toast.LENGTH_SHORT).show();
-//                Intent i = new Intent(this, SearchActivity.class);
-//                startActivity(i);
-                break;
-            }
-            case R.id.refresh: {
-                showProgressbarView();
-                auth.getUser(new AuthOnCompleteRetreiveInterface() {
-                    @Override
-                    public void onFireBaseUserRetrieveSuccess() {
-                        watchListAsyncTask = new WatchListAsyncTask(getApplication(), auth.user.getWatch_list_symbols());
-                        watchListAsyncTask.setWatchListDataRetrieveInterface(new WatchListDataRetrieveInterface() {
-                            @Override
-                            public void onDataFetched(List<WatchListItem> listItems) {
-                                mAdapter.refresh(listItems);
-                                showWatchListRecyclerView();
-                            }
-                        });
-                        watchListAsyncTask.execute(1);
-                    }
 
-                    @Override
-                    public void onFireBaseUserRetrieveFailure() {
-                        showNoConnectionView();
-                    }
-                });
-                break;
-            }
+
 
 
         }
@@ -162,8 +119,57 @@ public class WatchListActivity extends AppCompatActivity {
         progress_bar_view.setVisibility(View.VISIBLE);
     }
 
+    private void setAuthViewModel() {
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        authViewModel.getAuthData().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                user_main = user;
+                if (user == null) showNoConnectionView();
+                else {
+                    Log.i("Report>>>>>>>>>>", user.getUser_id());
+                    recyclerViewSetter();
+                    mAdapter = new WatchListAdapter(user_main.getWatch_list_symbols());
+                    recyclerView.setAdapter(mAdapter);
+                    showWatchListRecyclerView();
+
+                }
+
+
+            }
+        });
+        if (authViewModel.getAuthData().getValue() == null) {
+            authViewModel.setFirebaseFirestore();
+        }
+
+    }
+
     private void recyclerViewSetter() {
         recyclerView = findViewById(R.id.my_recycler_view);
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN | ItemTouchHelper.UP) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                Toast.makeText(WatchListActivity.this, "on Move", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                Toast.makeText(WatchListActivity.this, "on Swiped ", Toast.LENGTH_SHORT).show();
+                //Remove swiped item from list and notify the RecyclerView
+
+                int position = viewHolder.getAdapterPosition();
+                user_main.delete_watch_list_item(position);
+//                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRemoved(position);
+                authViewModel.updateUser(user_main);
+
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);

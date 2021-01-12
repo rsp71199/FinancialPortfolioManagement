@@ -11,17 +11,19 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.financialportfoliomanagement.Adapters.SearchAdapter;
-import com.example.financialportfoliomanagement.Auth.Auth;
-import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteRetreiveInterface;
 import com.example.financialportfoliomanagement.Interfaces.OnSearchResultRetrieveInterface;
 import com.example.financialportfoliomanagement.Models.SearchResult;
+import com.example.financialportfoliomanagement.Models.User;
 import com.example.financialportfoliomanagement.NetworkCalls.NetworkUtility;
 import com.example.financialportfoliomanagement.R;
+import com.example.financialportfoliomanagement.ViewModel.AuthViewModel;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
@@ -35,9 +37,11 @@ public class SearchActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private List<SearchResult> searchResults = new ArrayList<>();
     private Toolbar toolbar;
+    private AuthViewModel authViewModel;
+    private User user_main;
     ImageButton refresh;
-    private Auth auth;
-    private String from;
+
+    private String from = "A";
     LinearLayout recycler_view_view, no_connection_view, progress_bar_view;
     private NetworkUtility networkUtility;
     private String text;
@@ -45,23 +49,27 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setAuth();
+        setAuthViewModel();
+        init();
     }
 
-    private void setAuth() {
-        auth = new Auth();
-        auth.getUser(new AuthOnCompleteRetreiveInterface() {
-            @Override
-            public void onFireBaseUserRetrieveSuccess() {
-                init();
-            }
 
+    private void setAuthViewModel() {
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        authViewModel.getAuthData().observe(this, new Observer<User>() {
             @Override
-            public void onFireBaseUserRetrieveFailure() {
-                auth=null;
-                init();
+            public void onChanged(User user) {
+                user_main = user;
+                if (user_main != null && mAdapter != null) {
+
+
+                }
             }
         });
+        if (authViewModel.getAuthData().getValue() == null) {
+            authViewModel.setFirebaseFirestore();
+        }
+
     }
     private void setLayout(){
         setContentView(R.layout.activity_search);
@@ -83,12 +91,16 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
     private void setNetworkUtility(){
-        networkUtility = new NetworkUtility(this,auth);
+        networkUtility = new NetworkUtility(this);
         networkUtility.setOnSearchResultRetrieveInterface(new OnSearchResultRetrieveInterface() {
             @Override
             public void onSearchResultRetrieveSuccess(List<SearchResult> searchResultList) {
-                if(mAdapter==null){
-                    mAdapter = new SearchAdapter(searchResultList,getApplication(),auth);
+                searchResults = searchResultList;
+                if (mAdapter == null) {
+                    if (user_main != null) {
+
+                    }
+                    mAdapter = new SearchAdapter(searchResultList, user_main);
                     recyclerView.setAdapter(mAdapter);
                 }else{
                     mAdapter.refresh(searchResultList);
@@ -106,6 +118,8 @@ public class SearchActivity extends AppCompatActivity {
     }
     private void recyclerViewSetter() {
         recyclerView.setHasFixedSize(true);
+
+
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,

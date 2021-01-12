@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.financialportfoliomanagement.Auth.Auth;
 import com.example.financialportfoliomanagement.R;
 import com.example.financialportfoliomanagement.Registration.RegistrationContract;
 import com.example.financialportfoliomanagement.Registration.RegistrationPresenter;
@@ -29,7 +28,6 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     ProgressDialog mPrgressDialog;
 
     private static final int RC_SIGN_IN = 1;
-    Auth auth;
     private FirebaseAuth mAuth;
 
     @Override

@@ -12,7 +12,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.financialportfoliomanagement.Auth.Auth;
 import com.example.financialportfoliomanagement.Interfaces.OnCandleChartsDataRetrieveInterface;
 import com.example.financialportfoliomanagement.Interfaces.OnChartDataRetrieveFailure;
 import com.example.financialportfoliomanagement.Interfaces.OnIndexDataRetrieveInterface;
@@ -37,7 +36,7 @@ import java.util.Map;
 
 public class NetworkUtility {
     private Context context;
-    private Auth auth;
+//    private User user;
     private OnIndexDataRetrieveInterface onIndexDataRetrieveInterface;
     private OnStocksDataRetrieveInterface onStocksDataRetrieveInterface;
     private OnSearchResultRetrieveInterface onSearchResultRetrieveInterface;
@@ -76,14 +75,16 @@ public class NetworkUtility {
     public void setOnStocksDataRetrieveInterface(OnStocksDataRetrieveInterface onStocksDataRetrieveInterface) {
         this.onStocksDataRetrieveInterface = onStocksDataRetrieveInterface;
     }
+
     public NetworkUtility(Context context) {
         this.context = context;
     }
 
-    public NetworkUtility(Context context, Auth auth) {
-        this.context = context;
-        this.auth = auth;
-    }
+//    public NetworkUtility(Context context, User user) {
+//        this.context = context;
+//        this.user  = user;
+//    }
+
 
     public void setChart(String symbol, String function, final String interval, String apiKey, final int chart_id) {
 
@@ -229,7 +230,6 @@ public class NetworkUtility {
                             final JSONArray jsonArray = json.getJSONArray("bestMatches");
 //                            Log.i("TAG", response);
                             final Handler handler = new Handler();
-                            final List<String> user_watch_list = auth==null?null:auth.user.getWatch_list_symbols();
                             final Runnable r = new Runnable() {
                                 public void run() {
                                     searchResults.clear();
@@ -238,7 +238,7 @@ public class NetworkUtility {
                                             JSONObject jsonElement = jsonArray.getJSONObject(i);
                                             String sym = jsonElement.get("1. symbol").toString();
                                             String equityName = jsonElement.get("2. name").toString();
-                                            boolean b = user_watch_list != null && user_watch_list.contains(sym);
+                                            boolean b = false;
 
                                             searchResults.add(new SearchResult(equityName, sym, b));
 //                                            Log.i("TAG", equityName);

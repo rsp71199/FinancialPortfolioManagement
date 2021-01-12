@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -88,6 +89,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void onLoginSuccess(String message) {
         progressDialog.dismiss();
+        Log.i("TAG", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>login success");
         Intent intent = new Intent(LoginActivity.this, DashBoardActivity.class);
         startActivity(intent);
         finish();
@@ -97,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void onLoginFailure(String message) {
         progressDialog.dismiss();
         email.setError(message);
-//        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

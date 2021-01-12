@@ -1,29 +1,25 @@
 package com.example.financialportfoliomanagement.Adapters;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.financialportfoliomanagement.Activities.ChartsActivity;
-import com.example.financialportfoliomanagement.Auth.Auth;
-import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteUpdateInterface;
 import com.example.financialportfoliomanagement.Models.SearchResult;
+import com.example.financialportfoliomanagement.Models.User;
 import com.example.financialportfoliomanagement.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHolder> {
     private List<SearchResult> mDataset;
-    private Context context;
-    private Auth auth;
+    private User user;
+
 
     public void refresh(List<SearchResult> searchResultList) {
         mDataset = searchResultList;
@@ -44,11 +40,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
         }
     }
 
-    public SearchAdapter(List<SearchResult> myDataset, Context cont, Auth auth) {
-        this.auth = auth;
+    public SearchAdapter(List<SearchResult> myDataset, User user) {
         this.mDataset = myDataset;
-        this.context = cont;
+        this.user = user;
     }
+
 
     @Override
     public SearchAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -56,58 +52,31 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
                 .inflate(R.layout.search_result, parent, false);
 
 
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
         return new MyViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         Log.i("TAG", mDataset.get(position).name);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+        holder.add_to_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(context, ChartsActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                Log.i("GOING CHART ACTIVITY",">>>>>>>>>> chart set");
-                i.putExtra("SYMBOL", mDataset.get(position).symbol);
-                context.startActivity(i);
+                if (mDataset.get(position).added_to_list != true) {
+                    holder.add_to_list.setImageResource(R.drawable.options_added);
+
+                    notifyItemChanged(position);
+                    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                    user.add_watch_list_item(mDataset.get(position).symbol);
+                    firebaseFirestore.collection("users").document(user.getUser_id())
+                            .update("watch_list_symbols", user.getWatch_list_symbols());
+                }
             }
         });
-
-        if (auth != null) {
-            holder.add_to_list.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mDataset.get(position).added_to_list == false) {
-                        auth.user.add_watch_list_item(mDataset.get(position).symbol);
-                        auth.setUser(new AuthOnCompleteUpdateInterface() {
-                            @Override
-                            public void onFireBaseUserUpdateSuccess() {
-                                Toast.makeText(context, "Added to watch list", Toast.LENGTH_LONG);
-                                holder.add_to_list.setImageResource(R.drawable.options_added);
-
-                            }
-
-                            @Override
-                            public void onFireBaseUserUpdateFailure() {
-                                Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG);
-                            }
-                        }, auth.user);
-
-                    } else {
-                        Toast.makeText(context, "Limit reached", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-            if (mDataset.get(position).added_to_list) {
-                holder.add_to_list.setImageResource(R.drawable.options_added);
-            } else {
-                holder.add_to_list.setImageResource(R.drawable.options);
-            }
+        if (user.getWatch_list_symbols().contains(mDataset.get(position).symbol)) {
+            holder.add_to_list.setImageResource(R.drawable.options_added);
+        } else {
+            holder.add_to_list.setImageResource(R.drawable.options);
         }
 
 

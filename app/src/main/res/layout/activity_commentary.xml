@@ -65,6 +65,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/stock_name"
+                        android:focusedByDefault="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -72,20 +73,51 @@
 
                 <com.google.android.material.textfield.TextInputLayout
 
-                    android:layout_marginTop="16dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="Units of stock"
                     app:hintTextColor="@color/tertiary"
                     app:boxStrokeColor="@color/tertiary"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:hint="Date of Investment">
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/stock_date"
+                        android:id="@+id/stock_unit"
+                        android:focusedByDefault="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="center"
+                    android:gravity="start"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textSize="16dp"
+                        android:layout_marginLeft="12dp"
+                        android:text="Select Date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                    </TextView>
+
+                    <ImageButton
+                        android:id="@+id/date_time_button"
+                        android:layout_marginLeft="32dp"
+                        android:src="@drawable/clock"
+                        android:backgroundTint="@color/primary"
+                        android:tint="@color/White"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></ImageButton>
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
 
@@ -106,6 +138,7 @@
 
 
                 <RadioGroup
+                    android:id="@+id/radio_group"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:layout_width="match_parent"
@@ -135,6 +168,7 @@
                     android:textColor="@color/primaryExtraLight"
                     android:backgroundTint="@color/tertiary"
                     android:text="Submit" />
+
             </LinearLayout>
 
 
@@ -152,20 +186,31 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="textEnd" />
 
+                <Button
+                    android:layout_gravity="center"
+                    android:id="@+id/add_to_transaction"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primaryExtraLight"
+                    android:backgroundTint="@color/tertiary"
+                    android:text="Add transaction" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:backgroundTint="@color/tertiary"
-        android:src="@drawable/add"
-        app:borderWidth="0dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:foregroundTint="@color/tertiary"
-        android:layout_height="wrap_content">
+    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:backgroundTint="@color/tertiary"-->
+    <!--        android:src="@drawable/add"-->
+    <!--        app:borderWidth="0dp"-->
+    <!--        android:layout_alignParentEnd="true"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:layout_margin="16dp"-->
+    <!--        android:foregroundTint="@color/tertiary"-->
+    <!--        android:layout_height="wrap_content">-->
 
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+    <!--    </com.google.android.material.floatingactionbutton.FloatingActionButton>-->
 </RelativeLayout>

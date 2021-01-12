@@ -2,6 +2,7 @@ package com.example.financialportfoliomanagement.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,13 +13,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.financialportfoliomanagement.Adapters.DashBoardFragmentAdapter;
-import com.example.financialportfoliomanagement.Auth.Auth;
-import com.example.financialportfoliomanagement.Interfaces.AuthOnCompleteRetreiveInterface;
 import com.example.financialportfoliomanagement.Models.User;
 import com.example.financialportfoliomanagement.R;
+import com.example.financialportfoliomanagement.ViewModel.AuthViewModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -27,12 +29,14 @@ public class DashBoardActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
-    private Auth auth;
+    //    private Auth auth;
     private Menu sideNavigationMenu;
     private Toolbar toolbar;
-    private User user;
+    //    private User user;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private AuthViewModel authViewModel;
+    private User user_main;
     private DashBoardFragmentAdapter dashBoardFragmentAdapter;
 
     @Override
@@ -41,24 +45,25 @@ public class DashBoardActivity extends AppCompatActivity {
         setLayout();
         setSideNavigation();
         setListeners();
-        setAuth();
+        setAuthViewModel();
+//        setAuth();
     }
 
-    private void setAuth(){
-        auth.getUser(new AuthOnCompleteRetreiveInterface() {
-            @Override
-            public void onFireBaseUserRetrieveSuccess() {
-                user = auth.user;
-                if (user != null) {
-                    changeLoginStatus(true);
-                }
-            }
-            @Override
-            public void onFireBaseUserRetrieveFailure() {
-                user = null;
-            }
-        });
-    }
+    //    private void setAuth(){
+//        auth.getUser(new AuthOnCompleteRetreiveInterface() {
+//            @Override
+//            public void onFireBaseUserRetrieveSuccess() {
+//                user = auth.user;
+//                if (user != null) {
+//                    changeLoginStatus(true);
+//                }
+//            }
+//            @Override
+//            public void onFireBaseUserRetrieveFailure() {
+//                user = null;
+//            }
+//        });
+//    }
     private void setSideNavigation() {
         drawerLayout = (DrawerLayout) findViewById(R.id.activity_dashboard);
         actionBarDrawerToggle =
@@ -78,12 +83,11 @@ public class DashBoardActivity extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 switch (id) {
                     case R.id.login: {
-                        if (user != null) {
-                            Toast.makeText(DashBoardActivity.this, "hello " + user.getUser_id(), Toast.LENGTH_SHORT).show();
+                        if (user_main != null) {
+                            startActivity(new Intent(DashBoardActivity.this, ReportActivity.class));
                         } else {
                             moveToLoginActivity();
                         }
-
                         break;
                     }
                     case R.id.commentary: {
@@ -103,9 +107,9 @@ public class DashBoardActivity extends AppCompatActivity {
                         Toast.makeText(DashBoardActivity.this, "Contact Us", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.signOut: {
-                        if (user != null) {
-                            auth.signOut();
-                            user = null;
+                        if (user_main != null) {
+                            authViewModel.SignOut();
+                            user_main = null;
                         }
                         changeLoginStatus(false);
                         break;
@@ -120,7 +124,6 @@ public class DashBoardActivity extends AppCompatActivity {
     }
     private void setLayout() {
         setContentView(R.layout.activity_dash_board);
-        auth = new Auth();
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -212,9 +215,30 @@ public class DashBoardActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setAuthViewModel() {
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        authViewModel.getAuthData().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                user_main = user;
+                if (user_main == null) {
+                    changeLoginStatus(false);
+                } else {
+                    Log.i("Dashboard", ">>>>>>>>>>>>>>>>>>>>" + user_main.getUser_id());
+                    changeLoginStatus(true);
+                }
+            }
+        });
+        if (authViewModel.getAuthData().getValue() == null) {
+            authViewModel.setFirebaseFirestore();
+        }
+
+    }
+
     private void moveToLoginActivity() {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
+//        finish();
     }
 
 
