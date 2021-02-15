@@ -73,22 +73,6 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:gravity="end"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageButton
-
-                        android:src="@drawable/watch_list"
-                        android:backgroundTint="@color/primary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                    </ImageButton>
-                </LinearLayout>
-
 
             </LinearLayout>
 
@@ -100,13 +84,14 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/survey"
                 android:padding="8dp"
                 android:gravity="center"
                 android:weightSum="2"
                 android:orientation="horizontal"
                 android:layout_gravity="start"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="44dp">
 
                 <LinearLayout
                     android:layout_weight="1"
@@ -127,25 +112,45 @@
 
                 </LinearLayout>
 
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:background="@color/DarkGray"
+                android:layout_width="match_parent"
+                android:layout_height="1dp">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/recommendation_list"
+                android:padding="8dp"
+                android:gravity="center"
+
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="44dp">
+
                 <LinearLayout
-                    android:gravity="end"
                     android:layout_weight="1"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageButton
-                        android:id="@+id/survey"
-                        android:src="@drawable/watch_list"
-                        android:backgroundTint="@color/primary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
 
-                    </ImageButton>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:includeFontPadding="false"
+                        android:text="Recommendation list"
+                        android:textColor="@color/White"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
 
             </LinearLayout>
-
             <LinearLayout
                 android:background="@color/DarkGray"
                 android:layout_width="match_parent"
@@ -185,6 +190,56 @@
 
                     <ImageButton
                         android:src="@drawable/time"
+                        android:id="@+id/transactions"
+                        android:backgroundTint="@color/primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    </ImageButton>
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:background="@color/DarkGray"
+                android:layout_width="match_parent"
+                android:layout_height="1dp">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:padding="8dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:includeFontPadding="false"
+                        android:text="Watch list"
+                        android:textColor="@color/White"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:gravity="end"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:src="@drawable/watch_list"
+                        android:id="@+id/watch_list"
                         android:backgroundTint="@color/primary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">

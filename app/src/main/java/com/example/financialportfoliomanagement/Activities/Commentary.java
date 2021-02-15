@@ -25,6 +25,7 @@ import com.example.financialportfoliomanagement.R;
 import com.example.financialportfoliomanagement.Utilities.CustomDateTimePicker;
 import com.example.financialportfoliomanagement.ViewModel.AuthViewModel;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -35,7 +36,8 @@ public class Commentary extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RadioGroup radioGroup;
-    private EditText stock_sym;
+    private EditText stock_sym, stock_amount;
+    FirebaseFirestore firebaseFirestore;
     private Button submit, add_transaction;
     private ImageButton date_time_button;
     private MaterialAutoCompleteTextView prediction_period;
@@ -51,18 +53,20 @@ public class Commentary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_commentary);
 
-
+        firebaseFirestore = FirebaseFirestore.getInstance();
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
+        stock_sym = findViewById(R.id.stock_name);
+        stock_amount = findViewById(R.id.stock_amount);
         time_period_selector = findViewById(R.id.prediction_period);
         date_time_button = findViewById(R.id.date_time_button);
         radioGroup = findViewById(R.id.radio_group);
         prediction_period = findViewById(R.id.prediction_period);
         submit = findViewById(R.id.submit_comm);
         add_transaction = findViewById(R.id.add_to_transaction);
+
         init();
     }
 
@@ -139,16 +143,27 @@ public class Commentary extends AppCompatActivity {
 
             }
         });
-
         add_transaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                auth =
-                user_main.add_transaction_item("hello");
+                Date date = new Date();
+                Long time = date.getTime();
+                String s = time.toString() + "," + stock_sym.getText() + "," + stock_amount.getText();
+                user_main.add_transaction_item(s);
                 authViewModel.updateUser(user_main);
+
 
             }
         });
+//        add_transaction.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                auth =
+//                user_main.add_transaction_item("hello");
+//                authViewModel.updateUser(user_main);
+//
+//            }
+//        });
     }
 
     private void setAuthViewModel() {

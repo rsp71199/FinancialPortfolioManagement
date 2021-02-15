@@ -13,11 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.QuestionnareActivity">
+        <activity android:name=".Activities.RecommendationListActivity">
 
         </activity>
-        <activity android:name=".Activities.ReportActivity" />
+        <activity android:name=".Activities.CompanyActivity">
 
+        </activity>
+        <activity android:name=".Activities.QuestionnareActivity" />
+        <activity android:name=".Activities.ReportActivity" />
         <activity android:name=".Activities.Commentary" />
         <activity android:name=".Activities.WatchListActivity" />
         <activity android:name=".Activities.DashBoardActivity">

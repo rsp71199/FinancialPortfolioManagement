@@ -64,7 +64,8 @@ public class AuthViewModel extends ViewModel {
         if (firebaseUser != null) {
 
             firebaseFirestore.collection("users").document(firebaseUser.getUid())
-                    .update("watch_list_symbols", new_user.getWatch_list_symbols()
+                    .update("watch_list_symbols", new_user.getWatch_list_symbols(),
+                            "recommendation_list", new_user.getRecommendation_list()
                             , "riskScore", new_user.getRiskScore()
                             , "category", new_user.getCategory()
                             , "transactions", new_user.getTransactions()).addOnCompleteListener(new OnCompleteListener<Void>() {

@@ -7,16 +7,28 @@ public class User {
     private String name;
     private String user_id;
     private List<String> watch_list_symbols;
+
+
+    private List<String> recommendation_list;
     private List<String> transactions;
     private List<String> riskScore;
 
-    public User(String name, String user_id, List<String> watch_list_symbols, List<String> transactions, List<String> riskScore, String category) {
+    public User(String name, String user_id, List<String> watch_list_symbols, List<String> recommendation_list, List<String> transactions, List<String> riskScore, String category) {
         this.name = name;
         this.user_id = user_id;
         this.watch_list_symbols = watch_list_symbols;
         this.transactions = transactions;
         this.riskScore = riskScore;
         this.category = category;
+        this.recommendation_list = recommendation_list;
+    }
+
+    public List<String> getRecommendation_list() {
+        return recommendation_list;
+    }
+
+    public void setRecommendation_list(List<String> recommendation_list) {
+        this.recommendation_list = recommendation_list;
     }
 
     public String getCategory() {
@@ -124,6 +136,17 @@ public class User {
         if (this.watch_list_symbols != null) {
             if (this.watch_list_symbols.get(position) != null) {
                 this.watch_list_symbols.remove(position);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public boolean delete_recommendation_list_item(int position) {
+        if (this.recommendation_list != null) {
+            if (this.recommendation_list.get(position) != null) {
+                this.recommendation_list.remove(position);
                 return true;
             }
             return false;

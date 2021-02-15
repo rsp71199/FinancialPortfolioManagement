@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -57,7 +58,8 @@ public class ReportActivity extends AppCompatActivity {
     private LineChart lineChart;
     private AuthViewModel authViewModel;
     private User user_main;
-    private ImageButton survey;
+    private LinearLayout survey, recommendation_list;
+    private ImageButton watch_list, transactions;
     private Context context;
 
     @Override
@@ -74,10 +76,31 @@ public class ReportActivity extends AppCompatActivity {
     private void init() {
 
         survey = findViewById(R.id.survey);
+        recommendation_list = findViewById(R.id.recommendation_list);
+        transactions = findViewById(R.id.transactions);
+        watch_list = findViewById(R.id.watch_list);
+        recommendation_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getBaseContext(), RecommendationListActivity.class));
+            }
+        });
         survey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getBaseContext(), QuestionnareActivity.class));
+            }
+        });
+        watch_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getBaseContext(), WatchListActivity.class));
+            }
+        });
+        transactions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
         QuarterlyChart();

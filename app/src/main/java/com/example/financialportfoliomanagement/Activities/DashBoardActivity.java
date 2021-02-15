@@ -97,15 +97,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     case R.id.settings:
                         Toast.makeText(DashBoardActivity.this, "Settings", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.watchlist: {
-                        Toast.makeText(DashBoardActivity.this, "My Watch List", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(DashBoardActivity.this, WatchListActivity.class));
-                        break;
-                    }
 
-                    case R.id.contact:
-                        Toast.makeText(DashBoardActivity.this, "Contact Us", Toast.LENGTH_SHORT).show();
-                        break;
                     case R.id.signOut: {
                         if (user_main != null) {
                             authViewModel.SignOut();
@@ -153,12 +145,11 @@ public class DashBoardActivity extends AppCompatActivity {
     }
     private void changeLoginStatus(boolean isLoggedIn) {
         MenuItem loginItem = sideNavigationMenu.findItem(R.id.login);
-        MenuItem watchListItem = sideNavigationMenu.findItem(R.id.watchlist);
         MenuItem signOut = sideNavigationMenu.findItem(R.id.signOut);
         MenuItem commentary = sideNavigationMenu.findItem(R.id.commentary);
 
         if (isLoggedIn) {
-            watchListItem.setVisible(true);
+
             loginItem.setIcon(R.drawable.avatar);
             loginItem.setTitle("Profile");
             signOut.setVisible(true);
@@ -167,7 +158,7 @@ public class DashBoardActivity extends AppCompatActivity {
             navigationView.getHeaderView(0).findViewById(R.id.header_singOut).setVisibility(View.INVISIBLE);
         }
         else {
-            watchListItem.setVisible(false);
+
             loginItem.setIcon(R.drawable.login);
             loginItem.setTitle("Sign in");
             signOut.setVisible(false);

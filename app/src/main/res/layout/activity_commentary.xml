@@ -75,13 +75,13 @@
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Units of stock"
+                    android:hint="Amount invested"
                     app:hintTextColor="@color/tertiary"
                     app:boxStrokeColor="@color/tertiary"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/stock_unit"
+                        android:id="@+id/stock_amount"
                         android:focusedByDefault="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -167,7 +167,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/primaryExtraLight"
                     android:backgroundTint="@color/tertiary"
-                    android:text="Submit" />
+                    android:text="Get comment" />
 
             </LinearLayout>
 

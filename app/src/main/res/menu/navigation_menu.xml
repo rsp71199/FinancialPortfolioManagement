@@ -10,14 +10,6 @@
         android:title="Settings"
         android:icon="@drawable/settings" />
     <item
-        android:id="@+id/contact"
-        android:title="Contact Us"
-        android:icon="@drawable/contact" />
-    <item
-        android:id="@+id/watchlist"
-        android:title="My watch list"
-        android:icon="@drawable/watch_list" />
-    <item
         android:id="@+id/commentary"
         android:title="Commentary"
         android:icon="@drawable/ic_commentary" />

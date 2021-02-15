@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".Activities.WatchListActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_gravity="top"
+        android:gravity="top"
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_gravity="top"
+            android:id="@+id/toolbar"
+            app:title="Recommended stocks"
+            app:navigationIcon="@drawable/back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/Black" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/progress_bar_view"></include>
+
+        <include layout="@layout/no_connection_view"></include>
+
+        <RelativeLayout
+            android:id="@+id/recycler_view_view"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/my_recycler_view"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>
